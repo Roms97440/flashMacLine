@@ -13,6 +13,7 @@
     ]
   },
   "dependencies": {
+    "scheduler": "https://gitlab.com/c-arduino/scheduler.git",
     "adafruit/Adafruit INA219": "^1.2.3",
     "pololu/QTRSensors" :"^4.0.0" 
   }
