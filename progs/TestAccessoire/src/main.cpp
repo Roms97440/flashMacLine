@@ -1,5 +1,5 @@
 /* 
-Programme : _Diag
+Programme : TestAccessoire
 
 Description de ce programme test :
 Ce programme minimaliste permet de tester le bon fonctionnement des différents 

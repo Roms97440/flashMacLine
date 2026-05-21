@@ -13,7 +13,7 @@ Les broches 1 à 3 du capteur doivent être connecté au pin A1, A2 et A3 de l'A
 
 ## Usage :
 Cette classe est une tache (implémente Task), il suffit donc d'instancier un objet (unique) de cette classe
-pour activer est exploiter le capteur de ligne.
+pour activer et exploiter le capteur de ligne.
 Voici un résumé de son API :
 
     - le constructeur ne prend pas de paramètre

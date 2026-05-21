@@ -19,6 +19,18 @@
 		{
 			"name": "TestAccessoire",
 			"path": "progs/TestAccessoire"
+		},
+		{
+			"name": "TestRoue",
+			"path": "progs/TestRoue"
+		},
+		{
+			"name": "TestCapteur",
+			"path": "progs/TestCapteur"
+		},
+		{
+			"name": "Algo1",
+			"path": "progs/Algo1"
 		}
 	],
 	"settings": {}
