@@ -1,0 +1,20 @@
+{
+  "name": "hardwareLib",
+  "version": "1.01",
+  "description": "Classes des composants materiels du robot ",
+  "keywords": "arduino",
+  "frameworks": "arduino",
+  "platforms": ["atmelavr"],
+  "export": {
+    "include": "src/*",
+    "exclude": [
+        "**/.*",
+        "examples"
+    ]
+  },
+  "dependencies": {
+    "adafruit/Adafruit INA219": "^1.2.3",
+    "pololu/QTRSensors" :"^4.0.0" 
+  }
+}
+

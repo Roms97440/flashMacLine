@@ -62,24 +62,24 @@ class Bonjour : public Task { //la classe spécifique de cette tâche
 };
 Bonjour bjr; //activation de la tâche
 
-class Toto : public Task { //la classe spécifique de cette tâche
-  protected :
-    //... données internes de cette tâche ...
-  public :
-    Toto() : Task(3000){ //on fixe ici la rythmique 
-                //-> l'activité va se déclencher toutes les PERIODE millisecondes
-        //... valeurs de départ des données internes ...
-    }
-    void init() override {
-        //... traitement d'initialisation (sera exécuté dans la foction setup(...)) ...
-        Serial.begin(115200);
-    }
-    void run() override {
-        //... traitement de la tâche ... -> sera exécuté dans la fonction loop(...)
-        // MAIS seulement toutes les PERIODE millisecondes
-        Serial.println("TOTO");
-    }
-};
-//Toto toto; //activation de la tâche
+// class Toto : public Task { //la classe spécifique de cette tâche
+//   protected :
+//     //... données internes de cette tâche ...
+//   public :
+//     Toto() : Task(3000){ //on fixe ici la rythmique 
+//                 //-> l'activité va se déclencher toutes les PERIODE millisecondes
+//         //... valeurs de départ des données internes ...
+//     }
+//     void init() override {
+//         //... traitement d'initialisation (sera exécuté dans la foction setup(...)) ...
+//         Serial.begin(115200);
+//     }
+//     void run() override {
+//         //... traitement de la tâche ... -> sera exécuté dans la fonction loop(...)
+//         // MAIS seulement toutes les PERIODE millisecondes
+//         Serial.println("TOTO");
+//     }
+// };
+// //Toto toto; //activation de la tâche
 
 RMonitor moniteur;//Tache de suivi des ressources RAM/CPU

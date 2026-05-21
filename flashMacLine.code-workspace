@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "flashMacLine",
+			"path": "."
+		},
+		{
+			"name": "hello",
+			"path": "progs/hello"
+		},
+		{
+			"name": "testSchedule",
+			"path": "progs/testSchedule"
+		},
+		{
+			"name": "hardwareLib",
+			"path": "lib/hardwareLib"
+		},
+		{
+			"name": "TestAccessoire",
+			"path": "progs/TestAccessoire"
+		}
+	],
+	"settings": {}
+}
