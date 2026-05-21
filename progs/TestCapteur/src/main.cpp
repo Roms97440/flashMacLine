@@ -38,14 +38,14 @@ class LogQTR : public Task { //la classe spécifique de cette tâche
           case SensorQTR_3RC::READY:
             setPeriod(1000);
             ledJaune.setOn(false);
-            LOG_INFO("LogQtr : deviation =",capteur.deviation(),F("V1 ="),capteur.values(0),F("V2 ="),capteur.values(1),F("V3 ="),capteur.values(2));
+            LOG_INFO("LogQtr : ** deviation =",capteur.deviation(),F("**     (v1 ="),capteur.values(0),F("v2 ="),capteur.values(1),F("v3 ="),capteur.values(2), F(")"));
             break;
         }
       }
     }
     void launchCalibration(){//Lance la calibration dans un délai de 5 sec
       setPeriod(500);
-      _count=5;
+      _count=10; // 10 * 500ms = 5s
     }
 };
 LogQTR logqtr; //activation de la tâche
