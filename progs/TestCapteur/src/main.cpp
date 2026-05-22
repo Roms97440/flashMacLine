@@ -60,3 +60,97 @@ class BtCalibrate : public Button {
     }
 };
 BtCalibrate btBleu;
+
+class Roue : public Task { //la classe spécifique de cette tâche
+  protected :
+    uint8_t _pinPWM,_pinDIR;
+    bool _inversed;//à true si avant/arriere est inversé pour cette roue
+    //... données internes de cette tâche ...
+  public :
+    Roue(uint8_t pinPWM, uint8_t pinDIR, bool inversed=false) : Task(1000,false), _pinPWM(pinPWM), _pinDIR(pinDIR), _inversed(inversed){ //on fixe ici la rythmique 
+                //-> l'activité va se déclencher toutes les PERIODE millisecondes
+        //... valeurs de départ des données internes ...
+    }
+    void init() override {
+      pinMode(_pinPWM, OUTPUT);
+      pinMode(_pinDIR, OUTPUT);
+        
+    }
+    void run() override {
+        //... traitement de la tâche ... -> sera exécuté dans la fonction loop(...)
+        // MAIS seulement toutes les PERIODE millisecondes 
+    }
+    void forward(uint8_t speed){// Vitesse de 0 à 255
+
+      digitalWrite(_pinDIR, _inversed ? LOW : HIGH);
+      analogWrite(_pinPWM, speed);   
+    }
+
+    void backward(uint8_t speed){// Vitesse de 0 à 255
+      digitalWrite(_pinDIR, _inversed ? HIGH : LOW);
+      analogWrite(_pinPWM, speed);   
+    }
+
+    void stop(){// Vitesse de 0 à 255
+      analogWrite(_pinPWM, 0);   
+    }
+};
+Roue roueDroite(PIN_M1_PWM,PIN_M1_DIR,true); //activation de la tâche
+Roue roueGauche(PIN_M2_PWM,PIN_M2_DIR);
+
+class TestCapteur : public Task { //la classe spécifique de cette tâche
+  protected :
+    //... données internes de cette tâche ...
+    float Kp = 1.5;//Proportionnel
+    float Ki=0;//constante
+    float Kd=0;//derivé
+    long dt =1;
+    long dtpred=1;
+    float lastErreur=0;
+    uint8_t BASE_SPEED = 90;
+    uint8_t MAX_SPEED = 200;
+    uint8_t GAIN = 20;
+  public :
+    TestCapteur() : Task(1000){ //on fixe ici la rythmique 
+                //-> l'activité va se déclencher toutes les PERIODE millisecondes
+        //... valeurs de départ des données internes ...
+    }
+    int clamp(int value, int min, int max){
+      return min(max(value,min),max);
+    }
+
+    void run() override {
+      
+      unsigned long dt = micros()-dtpred;
+      
+      //... traitement de la tâche ... -> sera exécuté dans la fonction loop(...)
+      int somme = capteur.values(0)+capteur.values(1)+capteur.values(2);
+      int num=capteur.values(0)+capteur.values(2);
+      float erreur = num/somme;
+      
+        
+      // Terme Proportionnel : réaction immédiate à l'écart
+      float P = Kp * erreur;
+      float integral=0;
+      
+      // Terme Intégral : corrige les erreurs persistantes (biais)
+      integral += erreur * (float)dt/1000000;
+      integral = clamp(integral, -10, 10); // anti-windup
+      float I = Ki * integral;//erreur passé => pour ajustement des moteur 
+
+      // Terme Dérivé : anticipe et amortit les oscillations
+      float D = Kd * (erreur - lastErreur) / dt;
+      lastErreur = erreur;
+      float correction = P + I + D;
+
+      // Appliquer aux moteurs
+      // int motorLeft  = clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED);
+      // int motorRight = clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED);
+
+      roueDroite.forward(clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED));
+      roueGauche.forward(clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED));
+      lastErreur=erreur;
+      dtpred=micros();
+    }
+};
+TestCapteur test; //activation de la tâche

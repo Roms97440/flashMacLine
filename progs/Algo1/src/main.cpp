@@ -114,7 +114,7 @@ class Algo : public Task { //la classe spécifique de cette tâche
       pinMode(i, OUTPUT);  //set pin 4,5,6,7 to output mode
     }
     void run() override {
-       unsigned long dt = micros()-dtpred;
+      unsigned long dt = micros()-dtpred;
       dtpred = dt;
       int x, delay_en;
       char val;
