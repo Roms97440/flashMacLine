@@ -8,251 +8,122 @@
 #include "sensor/Button.h"
 #include "Pindef.h" //definitions des pins du robot
 #include "sensor/Qtr-3RC.h"
+#include "actuator/Motor.h"
 
 
-int EN1 = 6;
-int EN2 = 5;  //Roboduino Motor shield uses Pin 9
-int IN1 = 7;
-int IN2 = 4; //Latest version use pin 4 instead of pin 8
-unsigned long dtpred = 0;
 
-unsigned int sensors[3];
-int RIGHT = 2;
-int CENTER = 1;
-int LEFT = 0;
-float GAIN = 1;
-int MAX_SPEED = 255;
-int BASE_SPEED = 100;
 
-float Kp=3,Ki=0.015,Kd=0.2;
+Motor roueDroite(PIN_M1_PWM,PIN_M1_DIR,true); //activation de la tâche
+Motor roueGauche(PIN_M2_PWM,PIN_M2_DIR);
 
-float error = 0;
-float integral = 0;
-float lastError = 0;
 
-void Motor1(int pwm, boolean reverse) {
-  analogWrite(EN1, pwm); //set pwm control, 0 for stop, and 255 for maximum speed
-  if (reverse)  {
-    digitalWrite(IN1, HIGH);
-  }
-  else  {
-    digitalWrite(IN1, LOW);
-  }
-}
+Led ledJaune(PIN_LED_JAUNE);//pour signaler la calibration (clignote= lancement / fixe=calibration en cours)
+SensorQTR_3RC capteur;
 
-void Motor2(int pwm, boolean reverse) {
-  analogWrite(EN2, pwm);
-  if (reverse)  {
-    digitalWrite(IN2, HIGH);
-  }
-  else  {
-    digitalWrite(IN2, LOW);
-  }
-}
-
-void capteur(unsigned int capteur[3]){
-  bool c1 = false,c2 = false,c3 = false;
-  pinMode(11, OUTPUT);
-  pinMode(12, OUTPUT);
-  pinMode(13, OUTPUT);
-  digitalWrite(11, HIGH);
-  digitalWrite(12, HIGH);
-  digitalWrite(13, HIGH);
-  delayMicroseconds(10);
-  pinMode(11, INPUT);
-  pinMode(12, INPUT);
-  pinMode(13, INPUT);
-  unsigned long start1 = micros();
-  unsigned long start2 = micros();
-  unsigned long start3 = micros();
-  while(!(c1&&c2&&c3)){
-    if((!c1 && digitalRead(11) == LOW) ||(micros()-start1 >2000)){
-      capteur[0] = micros()-start1;
-      c1 = true;
+class LogQTR : public Task { //la classe spécifique de cette tâche
+  protected :
+    uint8_t _count;//compteur de lancement, si !=0 calibration en cours de lancement
+  public :
+    LogQTR() : Task(1000), _count(0){ //on fixe ici la rythmique 
     }
-    if((!c2 && digitalRead(12) == LOW) ||(micros()-start2 >2000)){
-      capteur[1] = micros()-start2;
-      c2 = true;
+    
+    void run() override {
+      if(_count>0){//phase de lancement de la calibration
+        _count--;
+        ledJaune.swap();
+        if(_count==0) capteur.calibrate();
+      } else {
+        switch(capteur.state()){
+          case SensorQTR_3RC::NEED_CALIBRATE:
+            ledJaune.setOn(false);
+            LOG_INFO("LogQtr : capteur non calibré");
+            break;
+          case SensorQTR_3RC::CALIBRATION:
+            ledJaune.setOn(true);
+            LOG_INFO("LogQtr : ... Calibration en cours ...");
+            break;
+          case SensorQTR_3RC::READY:
+            setPeriod(1000);
+            ledJaune.setOn(false);
+            LOG_INFO("LogQtr : ** deviation =",capteur.deviation(),F("**     (v1 ="),capteur.values(0),F("v2 ="),capteur.values(1),F("v3 ="),capteur.values(2), F(")"));
+            break;
+        }
+      }
     }
-    if((!c3 && digitalRead(13) == LOW) ||(micros()-start3 >2000)){
-      capteur[2] = micros()-start3;
-      c3 = true;
+    void launchCalibration(){//Lance la calibration dans un délai de 5 sec
+      setPeriod(500);
+      _count=10; // 10 * 500ms = 5s
     }
-  }
-  capteur[0]=capteur[0]/7.3;
-  capteur[1]=capteur[1]/4.2;
-  capteur[2]=capteur[2]-20;
+};
+LogQTR logqtr; //activation de la tâche
 
-  capteur[0]=capteur[0]>50;
-  capteur[1]=capteur[1]>50;
-  capteur[2]=capteur[2]>50;
-}
+  //Les boutons
+class BtCalibrate : public Button {
+  public :
+    SETNAME("Bouton Bleu")         //on fixe le nom de cette tâche
+    BtCalibrate() : Button(PIN_BT_BLEU){}
+    void onPressed() override {
+      logqtr.launchCalibration();
+    }
+};
+BtCalibrate btBleu;
 
-int clamp(int value, int min, int max){
-  return min(max(value,min),max);
-}
 
-// void setup() {
-//   Serial.begin(9600);
-//   for (int i = 4; i <= 7; i++) //For Arduino Motor Shield
-//     pinMode(i, OUTPUT);  //set pin 4,5,6,7 to output mode
-// }
 
-//Version scheduleur : 
-class Algo : public Task { //la classe spécifique de cette tâche
+class TestAlgo : public Task { //la classe spécifique de cette tâche
   protected :
     //... données internes de cette tâche ...
-  public : 
-    SETNAME("BonjourT")
-    Algo() : Task(250){ //on fixe ici la rythmique 
+    float Kp = 1.5;//Proportionnel
+    float Ki=0;//constante
+    float Kd=0;//derivé
+    long dt =1;
+    long dtpred=1;
+    float lastErreur=0;
+    uint8_t BASE_SPEED = 90;
+    uint8_t MAX_SPEED = 200;
+    uint8_t GAIN = 20;
+  public :
+    SETNAME("Algo")
+    TestAlgo() : Task(1000){ //on fixe ici la rythmique 
                 //-> l'activité va se déclencher toutes les PERIODE millisecondes
         //... valeurs de départ des données internes ...
     }
-    void init() override {
-      Serial.begin(9600);
-      for (int i = 4; i <= 7; i++) //For Arduino Motor Shield
-      pinMode(i, OUTPUT);  //set pin 4,5,6,7 to output mode
+    int clamp(int value, int min, int max){
+      return min(max(value,min),max);
     }
+
     void run() override {
+      
       unsigned long dt = micros()-dtpred;
-      dtpred = dt;
-      int x, delay_en;
-      char val;
-
-      /*
-      while (1)  {
-        val = Serial.read();
-        if (val != -1)    {
-          switch (val)      {
-            case 'z'://Move ahead
-              Motor1(255, false); //You can change the speed, such as Motor(50,true)
-              Motor2(255, true);
-              break;
-            case 's'://move back
-              Motor1(255, true);
-              Motor2(255, false);
-              break;
-            case 'q'://turn left
-              Motor1(255, false);
-              Motor2(255, false);
-              break;
-            case 'd'://turn right
-              Motor1(255, true);
-              Motor2(255, true);
-              break;
-            case 'x'://stop
-              Motor1(0, false);
-              Motor2(0, false);
-              break;
-          }
-        }
+      
+      //... traitement de la tâche ... -> sera exécuté dans la fonction loop(...)
+      int somme = capteur.values(0)+capteur.values(1)+capteur.values(2);
+      int num=capteur.values(0)+capteur.values(2);
+      float erreur = num/somme;
+      
         
-
-      
-      }
-      */
-
-      capteur(sensors);
-      error = (float)(sensors[RIGHT] - sensors[LEFT]) / (sensors[LEFT] + sensors[CENTER] + sensors[RIGHT]);
-      
       // Terme Proportionnel : réaction immédiate à l'écart
-      float P = Kp * error;
-
+      float P = Kp * erreur;
+      float integral=0;
+      
       // Terme Intégral : corrige les erreurs persistantes (biais)
-      integral += error * (float)dt/1000000;
+      integral += erreur * (float)dt/1000000;
       integral = clamp(integral, -10, 10); // anti-windup
-      float I = Ki * integral;
+      float I = Ki * integral;//erreur passé => pour ajustement des moteur 
 
       // Terme Dérivé : anticipe et amortit les oscillations
-      float D = Kd * (error - lastError) / dt;
-      lastError = error;
+      float D = Kd * (erreur - lastErreur) / dt;
+      lastErreur = erreur;
       float correction = P + I + D;
 
       // Appliquer aux moteurs
-      int motorLeft  = clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED);
-      int motorRight = clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED);
+      // int motorLeft  = clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED);
+      // int motorRight = clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED);
 
-      Motor2(motorLeft,false);
-      Motor1(motorRight,true);
-      
-
-      for (uint8_t i = 0; i < 3; i++)
-      {
-        Serial.print(sensors[i]);
-        Serial.print('\t');
-      }
-      Serial.println(" |");
+      roueDroite.forward(clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED));
+      roueGauche.forward(clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED));
+      lastErreur=erreur;
+      dtpred=micros();
     }
 };
-Algo algo; //activation de la tâche
-
-// void loop() {
-//   unsigned long dt = micros()-dtpred;
-//   dtpred = dt;
-//   int x, delay_en;
-//   char val;
-
-//   /*
-//   while (1)  {
-//     val = Serial.read();
-//     if (val != -1)    {
-//       switch (val)      {
-//         case 'z'://Move ahead
-//           Motor1(255, false); //You can change the speed, such as Motor(50,true)
-//           Motor2(255, true);
-//           break;
-//         case 's'://move back
-//           Motor1(255, true);
-//           Motor2(255, false);
-//           break;
-//         case 'q'://turn left
-//           Motor1(255, false);
-//           Motor2(255, false);
-//           break;
-//         case 'd'://turn right
-//           Motor1(255, true);
-//           Motor2(255, true);
-//           break;
-//         case 'x'://stop
-//           Motor1(0, false);
-//           Motor2(0, false);
-//           break;
-//       }
-//     }
-  
-//   }
-//   */
-
-//   capteur(sensors);
-//   error = (float)(sensors[RIGHT] - sensors[LEFT]) / (sensors[LEFT] + sensors[CENTER] + sensors[RIGHT]);
-  
-//   // Terme Proportionnel : réaction immédiate à l'écart
-//   float P = Kp * error;
-
-//   // Terme Intégral : corrige les erreurs persistantes (biais)
-//   integral += error * (float)dt/1000000;
-//   integral = clamp(integral, -10, 10); // anti-windup
-//   float I = Ki * integral;
-
-//   // Terme Dérivé : anticipe et amortit les oscillations
-//   float D = Kd * (error - lastError) / dt;
-//   lastError = error;
-//   float correction = P + I + D;
-
-//   // Appliquer aux moteurs
-//   int motorLeft  = clamp(BASE_SPEED + correction * GAIN, 0, MAX_SPEED);
-//   int motorRight = clamp(BASE_SPEED - correction * GAIN, 0, MAX_SPEED);
-
-//   Motor2(motorLeft,false);
-//   Motor1(motorRight,true);
-
-//   for (uint8_t i = 0; i < 3; i++)
-//   {
-//     Serial.print(sensors[i]);
-//     Serial.print('\t');
-//   }
-//   Serial.println(" |");
-
-//   delay(250);
-  
-// }
+TestAlgo test; //activation de la tâche

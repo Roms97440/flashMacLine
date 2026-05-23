@@ -5,6 +5,10 @@
 			"path": "."
 		},
 		{
+			"name": "----- Draft------",
+			"path": "__Draft"
+		},
+		{
 			"name": "hello",
 			"path": "progs/hello"
 		},
@@ -13,8 +17,16 @@
 			"path": "progs/testSchedule"
 		},
 		{
+			"name": "------ Lib ------",
+			"path": "__Lib"
+		},
+		{
 			"name": "hardwareLib",
 			"path": "lib/hardwareLib"
+		},
+		{
+			"name": "------ Test -----",
+			"path": "__Test"
 		},
 		{
 			"name": "TestAccessoire",
@@ -27,6 +39,10 @@
 		{
 			"name": "TestCapteur",
 			"path": "progs/TestCapteur"
+		},
+		{
+			"name": "----- Progs -----",
+			"path": "__Progs"
 		},
 		{
 			"name": "Algo1",
