@@ -1,21 +1,17 @@
 #include "Scheduler.h"
-//#include "Runner.h"
-#include "task/RMonitor.h"
-#include "Logger.h"
-#include "sensor/Ina219.h"
+#include "task/RMonitor.h"  //inclus déjà "Logger.h"
+
+//éléments du robot (commenter ceux non nécessaire):
+#include "Pindef.h" //definitions des pins du robot
+#include "sensor/Button.h"
 #include "actuator/Led.h"
 #include "actuator/Buzzer.h"
-#include "sensor/Button.h"
-#include "Pindef.h" //definitions des pins du robot
+#include "sensor/Ina219.h"
 #include "sensor/Qtr-3RC.h"
 #include "actuator/Motor.h"
 
-
-
-
 Motor roueDroite(PIN_M1_PWM,PIN_M1_DIR,true); //activation de la tâche
 Motor roueGauche(PIN_M2_PWM,PIN_M2_DIR);
-
 
 Led ledJaune(PIN_LED_JAUNE);//pour signaler la calibration (clignote= lancement / fixe=calibration en cours)
 SensorQTR_3RC capteur;
@@ -67,7 +63,6 @@ class BtCalibrate : public Button {
     }
 };
 BtCalibrate btBleu;
-
 
 
 class TestAlgo : public Task { //la classe spécifique de cette tâche

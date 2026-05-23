@@ -1,8 +1,5 @@
-#define NO_MAIN_FILE
+#define NO_MAIN_FILE    // /!\ tous les fichiers secondaires doivent commencer par ça 
 #include "Scheduler.h"     //chargement du moteur d'exécutiond de la librairie
-#include "task/RMonitor.h"
-#include "Logger.h"
-
 
 class Toto : public Task { //la classe spécifique de cette tâche
   protected :

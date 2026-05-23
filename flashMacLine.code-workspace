@@ -5,6 +5,10 @@
 			"path": "."
 		},
 		{
+			"name": "===== Doc ====",
+			"path": "doc"
+		},
+		{
 			"name": "----- Draft------",
 			"path": "__Draft"
 		},
