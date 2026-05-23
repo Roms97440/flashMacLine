@@ -6,6 +6,9 @@
  - Utilisez **VSCode**, avec l'extension **PlatformIO**.
  - Dans **VSCode** ouvrez le projet en ouvrant le fichier `espace de travail` (*workspace* en anglais) : "flashMacLine.code-workspace", situé en racine de ce dossier.
 
-Pour une aide sur l'installation et l'utilisation de l'extension **PlatformIO**, ainsi que sur l'organisation générale du dossier de ce projet, consultez ces pages : 
-    - [Mise en place et utilisation de l'extension PlatformIO (VSCode)](https://gitlab.com/c-arduino/scheduler/-/blob/main/doc/platformio.md?ref_type=heads)
-    - [Organisation des projets](https://gitlab.com/c-arduino/scheduler/-/blob/main/doc/projet.md?ref_type=heads)
+### Lecture d'aide (important) :
+
+Voici les pages web à consulter pour une aide sur les sujets suivants :
+- [L'installation et l'utilisation de l'extension **PlatformIO**](https://doc.payet.top/scheduler/platformio.md).
+- [L'organisation générale du dossier de ce projet](https://doc.payet.top/scheduler/projet.md).
+- [Sur l'utilisation de la librairie Scheduler](https://doc.payet.top/scheduler/chapitre%201%20-%20structure%20du%20code.md).
