@@ -1,9 +1,17 @@
 ## Listing des programmes
 
-+++ (pour consulter ce fichier)
+<!-- #region (à replier) -->
++++ (si vous consultez ce fichier dans **VSCode**)
+Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
 - choisir "Ouvrir l'aperçu"
+- glisser ensuite la fenêtre d'apperçu sur le bord droit pour la laisser ouverte en parallèle du code
+
+Notez que cette documentation est consultable en ligne sur cette page :
+
+=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan.md)
 +++
+<!-- #endregion -->
 ---
 
 <span style='color: red'>**Attention :** </span> ne pas oublier de choisir le projet cible (bouton Switch dans la barre d'action de **PlatformIO** tout en bas), avant de compiler/uploader.
@@ -32,3 +40,8 @@ Voici la liste des différents programmes (donc des sous projets **PlatformIO**)
 
 - **Progs** : les programmes généraux (dont le programme final...).
     - Algo1 : test d'un premier algo de pilotage basique.
+
+<br/>
+
+---
+(retour à [la page d'accueil](./_plan.md))

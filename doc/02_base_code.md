@@ -1,9 +1,17 @@
 ## Modèle de base de code
 
-+++ (pour consulter ce fichier)
+<!-- #region (à replier) -->
++++ (si vous consultez ce fichier dans **VSCode**)
+Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
 - choisir "Ouvrir l'aperçu"
+- glisser ensuite la fenêtre d'apperçu sur le bord droit pour la laisser ouverte en parallèle du code
+
+Notez que cette documentation est consultable en ligne sur cette page :
+
+=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan.md)
 +++
+<!-- #endregion -->
 ---
 
 ### 1 - A la création d'un nouveau programme (projet PlatformIO) :
@@ -86,3 +94,8 @@ class _NAME_ : public NeedInit {
 };
 _NAME_ _name_; //activation de l'unité(remplacer aussi `_name_`)
 ```
+
+<br/>
+
+---
+(retour à [la page d'accueil](./_plan.md))

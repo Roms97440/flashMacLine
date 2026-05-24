@@ -141,12 +141,12 @@ public: // API
         digitalWrite(_pin, LOW);
     }
     void run() override {
-        if(_blink){
+        if(_blink){ //gestion du clignotement toutes les secondes
             _isOn=!_isOn;
             digitalWrite(_pin, _isOn ? HIGH : LOW);
         }
         _count--;
-        if(_count<=0){
+        if(_count<=0){ //mise à jour de l'état tutes les 5 secondes
             _count=5;
             _blink=false;
             float bp = _ina219->batPourcent();
