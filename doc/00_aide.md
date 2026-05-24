@@ -54,7 +54,7 @@ Pour consulter la charge de la batterie il suffit de créer un objet `SensorINA2
 
 //...
 
-SensorINA219 capteurINA219;   //pour l'affichage des données du capteur de tension/courant
+SensorINA219 capteurINA219; //affichage des données du capteur de tension/courant
 ```
 Cet objet est une tâche qui consulte le capteur de tension **Ina219** toutes les 2 secondes, pour afficher un bilan énergétique dans la console. La dernière ligne de ce bilan donne le pourcentage de batterie restant.
 
@@ -71,8 +71,8 @@ Afin d'aider à cette surveillance, vous pouvez inclure dans vos programmes la t
 
 //...
 
-SensorINA219 capteurINA219;   //pour l'affichage des données du capteur de tension/courant
-LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //affecte la led rouge aux alertes batteries
+SensorINA219 capteurINA219; //affichage des données du capteur de tension/courant
+LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
 
 //...
 ```

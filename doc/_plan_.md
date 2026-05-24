@@ -16,7 +16,7 @@ Notez que cette documentation est consultable en ligne sur cette page :
 
 ---
 
-Version du projet Falsh-McLine : **v0.2.03**
+Version du projet Falsh-McLine : **v0.2.04**
 
 1. [Aide général (important)](<./00_aide.md>)
 1. [Liste des programmes](<./01_listing.md>)
