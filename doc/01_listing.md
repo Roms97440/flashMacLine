@@ -1,7 +1,8 @@
 ## Listing des programmes
 
 <!-- #region (à replier) -->
-+++ (si vous consultez ce fichier dans **VSCode**)
+<details><summary>(si vous consultez ce fichier dans **VSCode**)</summary>
+
 Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
 - choisir "Ouvrir l'aperçu"
@@ -10,8 +11,9 @@ Pour améliorer le confort de lecture :
 Notez que cette documentation est consultable en ligne sur cette page :
 
 => [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan_.md)
-+++
+</details>
 <!-- #endregion -->
+
 ---
 
 <span style='color: red'>**Attention :** </span> ne pas oublier de choisir le projet cible (bouton Switch dans la barre d'action de **PlatformIO** tout en bas), avant de compiler/uploader.
