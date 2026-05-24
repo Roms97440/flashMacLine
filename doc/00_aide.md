@@ -1,16 +1,17 @@
+---
+title: (FMcL) Aide générale
+---
 ## Aide générale (important) 
 
-<!-- #region (à replier) -->
+<!-- #region(collapsed) (à replier) -->
 <details><summary>(si vous consultez ce fichier dans **VSCode**)</summary>
 
 Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
-- choisir "Ouvrir l'aperçu"
-- glisser ensuite la fenêtre d'apperçu sur le bord droit pour la laisser ouverte en parallèle du code
+- choisir "Ouvrir l'aperçu" (*overview*)
+- glisser ensuite la fenêtre d'aperçu sur le bord droit pour la laisser ouverte en parallèle du code
 
-Notez que cette documentation est consultable en ligne sur cette page :
-
-=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan_.md)
+Notez que cette [documentation est consultable en ligne sur cette page](https://doc.payet.top/flashmcline/_plan_.md)
 </details>
 <!-- #endregion -->
 
