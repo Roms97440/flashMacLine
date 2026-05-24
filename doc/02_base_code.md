@@ -9,7 +9,7 @@ Pour améliorer le confort de lecture :
 
 Notez que cette documentation est consultable en ligne sur cette page :
 
-=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan.md)
+=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan_.md)
 +++
 <!-- #endregion -->
 ---
@@ -98,4 +98,4 @@ _NAME_ _name_; //activation de l'unité(remplacer aussi `_name_`)
 <br/>
 
 ---
-(retour à [la page d'accueil](./_plan.md))
+(retour à [la page d'accueil](./_plan_.md))

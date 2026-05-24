@@ -9,12 +9,12 @@ Pour améliorer le confort de lecture :
 
 Notez que cette documentation est consultable en ligne sur cette page :
 
-=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan.md)
+=> [version web consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan_.md)
 +++
 <!-- #endregion -->
 ---
 
-Version : **v0.2**
+Version : **v0.2.01**
 
 1. [Aide général (important)](<./00_aide.md>)
 1. [Liste des programmes](<./01_listing.md>)
