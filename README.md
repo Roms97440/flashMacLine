@@ -1,13 +1,23 @@
 # Projet : Flash-MacLine
 
-+++ (pour consulter ce fichier)
+<!-- #region (à replier) -->
+<details><summary>(si vous consultez ce fichier dans **VSCode**)</summary>
+
+Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
 - choisir "Ouvrir l'aperçu"
-+++
+- glisser ensuite la fenêtre d'apperçu sur le bord droit pour la laisser ouverte en parallèle du code
+
+Notez que cette documentation est consultable en ligne sur cette page :
+
+=> [version de la doc consultable dans un navigateur](https://doc.payet.top/flashmcline/_plan_.md)
+</details>
+<!-- #endregion -->
+
 ---
 
 ### Pour ce projet :
  - Utilisez **VSCode**, avec l'extension **PlatformIO**.
  - Dans **VSCode** ouvrez le projet en ouvrant le fichier `espace de travail` (*workspace* en anglais) : "flashMacLine.code-workspace", situé en racine de ce dossier.
 
-Pour l'aide et la documentation de ce projet, consultez les fichiers de la rubrique `==== Doc ====`. Faites notamment une lecture attentive (obligatoire) du premier fichier de cette rubrique : [00_aide.md](doc/00_aide.md).
+Pour l'aide et la documentation de ce projet, consultez les fichiers de la rubrique `==== Doc ====`.<br/>Faites notamment une lecture attentive (obligatoire) du premier fichier de cette rubrique : [00_aide.md](doc/00_aide.md).
