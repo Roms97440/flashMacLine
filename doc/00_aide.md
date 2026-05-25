@@ -3,8 +3,8 @@ title: (FMcL) Aide générale
 ---
 ## Aide générale (important) 
 
-<!-- #region(collapsed) (à replier) -->
-<details><summary>(si vous consultez ce fichier dans **VSCode**)</summary>
+<!-- #region (à replier) -->
+<details open><summary>(si vous consultez ce fichier dans **VSCode**)</summary>
 
 Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)

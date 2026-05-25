@@ -51,6 +51,10 @@
 		{
 			"name": "Algo1",
 			"path": "progs/Algo1"
+		},
+		{
+			"name": "autoCalibrate",
+			"path": "progs/autoCalibrate"
 		}
 	],
 	"settings": {}

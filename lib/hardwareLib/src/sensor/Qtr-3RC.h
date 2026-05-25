@@ -52,6 +52,7 @@ constexpr uint8_t PIN_QTR_DROITE = A3;
 
 class SensorQTR_3RC : public Task {
 public :
+    SETNAME("Sensor QTR_3RC")
     enum StateQTR { NEED_CALIBRATE, CALIBRATION, READY };
 /* #region (attributs internes) */  
   protected :
@@ -63,9 +64,7 @@ public :
 /* #endregion */
 
 public : // API
-    SETNAME("Sensor QTR_3RC")
     SensorQTR_3RC() : Task(20), _state(NEED_CALIBRATE), _deviation(0), _countCalibration(0){}
-
     bool ready() { return _state==READY; }
     StateQTR state() { return _state; }
     int16_t deviation() { return _deviation; }
