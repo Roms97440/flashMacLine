@@ -87,6 +87,13 @@ public : // API
         _state=CALIBRATION;
         _countCalibration=count;
     }
+    void cancelCalibration() {
+        if (_state == CALIBRATION) {
+            _countCalibration = 0;
+            _state = NEED_CALIBRATE; // On force le retour à l'état non-calibré
+            LOG_INFO("SensorQTR_3RC | Calibration annulée par l'utilisateur.");
+        }
+    }    
 
 /* #region(collapsed) Implémentation interne */
     void init() override {

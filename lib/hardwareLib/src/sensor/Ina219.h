@@ -145,8 +145,7 @@ public: // API
             _isOn=!_isOn;
             digitalWrite(_pin, _isOn ? HIGH : LOW);
         }
-        _count--;
-        if(_count<=0){ //mise à jour de l'état tutes les 5 secondes
+        if(_count==0){ //mise à jour de l'état tutes les 5 secondes
             _count=5;
             _blink=false;
             float bp = _ina219->batPourcent();
@@ -163,7 +162,7 @@ public: // API
                     digitalWrite(_pin, HIGH);                    
                 }                
             }
-        }
+        } else _count--;
     }
 /* #endregion */
 };

@@ -16,9 +16,11 @@ public:
         pinMode(_pin, OUTPUT);
     }
     void run() override {
-        tone(_pin, _frequency, _duration);
-        _repeat--;
-        if(_repeat<=0) setEnabled(false); //arrêt de la répétition 
+        if(_repeat==0) setEnabled(false); //arrêt de la répétition 
+        else {
+            tone(_pin, _frequency, _duration);
+            _repeat--;
+        }
     }
 /* #endregion */
 public: // API
@@ -31,26 +33,32 @@ public: // API
     }
 
     void bip(uint16_t duree=500, uint8_t repeat=1, uint16_t delay=1000){   //standard
-        tone(_pin, 1500, 700);
+        tone(_pin, 1500, duree);
         if(repeat>1){ //programmation de la répétition
+            _frequency = 225;
+            _duration = duree;
             _repeat=repeat-1;
-            setPeriod(700+delay);
+            setPeriod(duree+delay);
             setEnabled(true);
         }
     }
     void notif(uint16_t duree=500, uint8_t repeat=1, uint16_t delay=1000){  //aigu
         tone(_pin, 2750, duree);
         if(repeat>1){ //programmation de la répétition
+            _frequency = 225;
+            _duration = duree;
             _repeat=repeat-1;
-            setPeriod(700+delay);
+            setPeriod(duree+delay);
             setEnabled(true);
         }
     }
     void buzz(uint16_t duree=500, uint8_t repeat=1, uint16_t delay=1000){   //grave
         tone(_pin, 225, duree);
         if(repeat>1){ //programmation de la répétition
+            _frequency = 225;
+            _duration = duree;
             _repeat=repeat-1;
-            setPeriod(700+delay);
+            setPeriod(duree+delay);
             setEnabled(true);
         }
     }
