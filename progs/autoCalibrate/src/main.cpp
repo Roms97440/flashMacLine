@@ -1,4 +1,4 @@
-// /!\ ATTENTION /!\ codage en cours...
+// /!\ ATTENTION /!\ codage en cours... pour l'instant ce programme n'est pas fonctionnel :(
 #include "Scheduler.h"
 #include "task/RMonitor.h"  //inclus déjà "Logger.h"
 //éléments du robot (commenter ceux non nécessaires):

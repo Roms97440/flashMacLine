@@ -37,6 +37,11 @@ Voici un résumé de son API :
         - void calibrate() : lance un cycle de calibration. Ce cyle dure 10 secondes, et pendant
             cette durée il est nécessaire que la ligne passe plusieurs fois sous le capteur pour
             que chaque photoresistance perçoit du blanc et du noir à plusieurs reprises.
+
+NB: si lostLine() est vrai, la variable _deviation n'est pas nulle !
+    => elle contient la direction vers laquelle il faut tourner pour retrouver la ligne.
+    C'est un effet mémoire volontaire mis en place dans la librairie Pololu, et il faut
+    donc penser à l'exploiter ;)
 */
 #pragma once
 
@@ -54,7 +59,7 @@ class SensorQTR_3RC : public Task {
 public :
     SETNAME("Sensor QTR_3RC")
     enum StateQTR { NEED_CALIBRATE, CALIBRATION, READY };
-/* #region (attributs internes) */  
+/* #region(collapsed) Attributs internes */  
   protected :
     QTRSensors _qtr;
     StateQTR _state;    //true si le capteur est ready
@@ -64,7 +69,9 @@ public :
 /* #endregion */
 
 public : // API
-    SensorQTR_3RC() : Task(20), _state(NEED_CALIBRATE), _deviation(0), _countCalibration(0){}
+    SensorQTR_3RC() : Task(20), _state(NEED_CALIBRATE), _deviation(0), _countCalibration(0){
+        memset(_values, 0, sizeof(_values)); // Mise à zéro du tableau _values
+    }
     bool ready() { return _state==READY; }
     StateQTR state() { return _state; }
     int16_t deviation() { return _deviation; }
@@ -81,7 +88,7 @@ public : // API
         _countCalibration=count;
     }
 
-/* #region (implémentation interne) */
+/* #region(collapsed) Implémentation interne */
     void init() override {
         _qtr.setTypeRC(); //configuration du capteur (Type RC)
         // Assignation des broches (dans l'ordre physique : gauche à droite)
