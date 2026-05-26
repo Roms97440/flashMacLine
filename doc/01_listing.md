@@ -8,7 +8,7 @@ title: (FMcL) Listing
 
 Pour améliorer le confort de lecture :
 - clic-droit sur le fichier dans le volet d'exploration (l'explorateur à gauche)
-- choisir "Ouvrir l'aperçu" (*overview*)
+- choisir "Ouvrir l'aperçu" (*Open preview*)
 - glisser ensuite la fenêtre d'aperçu sur le bord droit pour la laisser ouverte en parallèle du code
 
 Notez que cette [documentation est consultable en ligne sur cette page](https://doc.payet.top/flashmcline/_plan_.md)
