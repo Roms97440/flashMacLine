@@ -13,15 +13,10 @@ Programme : TestRoue
 #include "actuator/Motor.h"
 
 
-
-
-Motor roueDroite(PIN_M1_PWM,PIN_M1_DIR,true); //activation de la tâche
-Motor roueGauche(PIN_M2_PWM,PIN_M2_DIR);
-
-
+Motor roueDroite(RIGHT,true); //activation de la tâche
+Motor roueGauche(LEFT);
 
 //Création des objets :
-
   //Les éléments de log
 RMonitor rmonitor;            //pour l'affichage de la consommation des ressources (cpu/mémoire)
 SensorINA219 capteurINA219;   //pour l'affichage des données du capteur de tension/courant
@@ -65,11 +60,3 @@ class BtGris : public Button {
     }    
 };
 BtGris btGris;
-
-//  void setup() {
-//     Runner.init();  //initialisation du moteur d'exécution scheduler
-// }
-
-//  void loop() {
-//     Runner.execute(); //traitement des tâches
-// }

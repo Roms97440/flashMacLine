@@ -134,7 +134,7 @@ protected:
 /* #endregion */
 public: // API
     SETNAME("Buzzer")
-    LedBat(uint8_t pin, SensorINA219& ina219) : Task(1000), _pin(pin), _ina219(&ina219), _count(0), _blink(false),_isOn(false){}
+    LedBat(uint8_t pin, SensorINA219& ina219) : Task(1000), _pin(pin), _count(0), _ina219(&ina219), _blink(false),_isOn(false){}
 /* #region (implémentation interne) */
     void init() override {
         pinMode(_pin, OUTPUT);
