@@ -88,8 +88,9 @@ class SmothMotor : public Task { //moteur à correction de puissance et changeme
         _applySpeed();
       }  
     }
-    void stop(bool immediate=false){//arrêt des moteurs
+    void stop(bool immediate=false, bool reverseSens=false){//arrêt des moteurs
       _targetSpeed = 0;
+      if(reverseSens) _targetSens=!_curSens;
       if(immediate){
         _curSpeed=0;
         analogWrite(_pinPWM, 0);
@@ -165,8 +166,8 @@ class BiMotor : public NeedInit { //la classe de gestion simplifiée des 2 moteu
       _motorR->move(sens, speed, immediate);
       _motorL->move(sens, speed, immediate);
     }
-    void stop(bool immediate=false){//arrêt des moteurs
-      _motorR->stop(immediate);
-      _motorL->stop(immediate); 
+    void stop(bool immediate=false, bool reverseSens=false){//arrêt des moteurs
+      _motorR->stop(immediate, reverseSens);
+      _motorL->stop(immediate, reverseSens); 
     }
 };

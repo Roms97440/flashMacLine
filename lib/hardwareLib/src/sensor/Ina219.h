@@ -122,6 +122,8 @@ public : // API
     - led éteinte : niveau >= 40%
     - led glinotante : 40% > niveau >= 20%
     - led allumée fixe : niveau < 20%
+
+NB: au lancement, la led restera allumée 5 secondes pour permettre de constater que celle-ci fonctionne bien.
 */
 class LedBat : public Task {
 protected:

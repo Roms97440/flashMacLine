@@ -12,6 +12,7 @@ Protocole de calibration :
 
 NB: - cette classe log aussi l'état du capteur de ligne toutes les secondes 
     (sauf durant les 10 secondes de lancement d'une phase de calibration)
+    -> il devrait donc passer sur la ligne entre 10 et 12 fois.
 
     - pour annuler la calibration (ou son lancement) appuyez simplement à nouveau sur le bouton GRIS.
 */
@@ -28,7 +29,7 @@ SensorQTR_3RC capteur;
 Buzzer buzzer(PIN_BUZZER);
 
 extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cpp
-constexpr uint8_t SPEED_DANSE = 90;  //constante de vitesse pour les mouvements de danse de la calibration automatique
+constexpr uint8_t SPEED_DANSE = 110;  //constante de vitesse pour les mouvements de danse de la calibration automatique
 
 class AutoCalib : public Task { //Tâche de gestion de la calibration et des logs du capteur de ligne
   public :
@@ -84,7 +85,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
           case SensorQTR_3RC::CALIBRATION: //la calibration est en cours     
             if(_pause) { //on fait une pause durant cette demi-période
               _pause=false;
-              motors.stop();
+              motors.stop(false, true);
               LOG_INFO("LogQtr : ... Calibration en cours ...");
             } else { //on applique le mouvement de danse courant
               motors.move(_danse==DANSE_FORWARD ? FORWARD : BACKWARD, SPEED_DANSE);
