@@ -57,5 +57,4 @@ inline uint8_t safe_float_to_uint8(float f) { //convertion (+arrondi) float -> u
     // 3. Conversion sécurisée
     return static_cast<uint8_t>(clamped);
 }
-
 /* #endregion */
