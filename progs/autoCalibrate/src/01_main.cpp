@@ -22,7 +22,10 @@ RMonitor rmonitor;            //pour l'affichage de la consommation des ressourc
 
 //Gestion de la batterie
 SensorINA219 capteurINA219;   //affichage des données du capteur de tension/courant
-LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
+LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
+  //cette macro est un équivalent plus pratique de :
+  // LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
+
 
 //Configuration des moteurs (faire des essais TestForward pour ajuster le delta des roues si le mouvement dévie trop)
 SmothMotor _roueDroite(RIGHT,true); 

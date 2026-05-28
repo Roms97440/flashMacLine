@@ -47,12 +47,14 @@ class TestForward : public Task { //pour faire avancer le robot pendant 10 secon
 TestForward testForward; //activation de la tâche (remplacer aussi `_name_`)
 
 //Le bouton BLEU => Test de ligne droite (6 secondes)
-class BtGoForward : public Button { //Pour lancer la tâche TestForward
-  public :
-    SETNAME("BtGoForward")         //on fixe le nom de cette tâche
-    BtGoForward() : Button(PIN_BT_BLEU){}
-    void onPressed() override {
-      testForward.start(6); //6 secondes en ligne droite
-    }
-};
-BtGoForward btGoForward;
+ACTION_BUTTON(btGoForward, PIN_BT_BLEU, [](){ testForward.start(6); } , "Bouton Bleu -> testForward");
+//--> cette nouvelle macro permet d'écrire plus simplement ce qu'on écrivait ainsi :
+// class BtGoForward : public Button { //Pour lancer la tâche TestForward
+//   public :
+//     SETNAME("Bouton Bleu -> testForward")  //on fixe le nom de cette tâche
+//     BtGoForward() : Button(PIN_BT_BLEU){}
+//     void onPressed() override {
+//       testForward.start(6); //6 secondes en ligne droite
+//     }
+// };
+// BtGoForward btGoForward;

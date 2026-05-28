@@ -133,10 +133,10 @@ protected:
     SensorINA219* _ina219;
     bool _blink;
     bool _isOn;
+    const __FlashStringHelper* _name;
 /* #endregion */
 public: // API
-    SETNAME("Buzzer")
-    LedBat(uint8_t pin, SensorINA219& ina219) : Task(1000), _pin(pin), _count(0), _ina219(&ina219), _blink(false),_isOn(false){}
+    LedBat(uint8_t pin, SensorINA219& ina219, const __FlashStringHelper* name=nullptr) : Task(1000), _pin(pin), _count(0), _ina219(&ina219), _blink(false),_isOn(false){}
 /* #region (implémentation interne) */
     void init() override {
         pinMode(_pin, OUTPUT);
@@ -166,5 +166,15 @@ public: // API
             }
         } else _count--;
     }
+    const __FlashStringHelper* name() override { 
+        return _name==nullptr ? F("led alerte batterie") : _name;
+    }
 /* #endregion */
 };
+
+//Pour fixer le nom de la led batterie (pour le bilan de lancement RMonitor), il faut passer par une macro
+//car F(...) est interdit dans le scope global
+#define LED_BAT(VarName, Pin, CaptorIna219, StringName) \
+  const char VarName##_name[] PROGMEM = StringName; \
+  LedBat VarName(Pin, CaptorIna219, (const __FlashStringHelper*)VarName##_name)
+  

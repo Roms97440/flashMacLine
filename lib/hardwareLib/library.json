@@ -1,6 +1,6 @@
 {
   "name": "hardwareLib",
-  "version": "1.01",
+  "version": "1.3",
   "description": "Classes des composants materiels du robot ",
   "keywords": "arduino",
   "frameworks": "arduino",

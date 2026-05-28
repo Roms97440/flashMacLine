@@ -35,7 +35,51 @@ Voici les pages web à consulter pour une aide sur les sujets suivants :
 
 - [Sur l'utilisation de la librairie Scheduler](https://doc.payet.top/scheduler/chapitre%201%20-%20structure%20du%20code.md).
 
-### 3 - Procédure de connexion USB du robot
+### 3 - Mises à jour, et vérification des dépendances 
+
+Comme vous l'aurez compris, le proget global comporte plusieurs sous-projet qui correspondent chacun à un projet PlatformIO (la librairie commune `hardwareLib`, et les différents programmes à uploader vers le robot). Aussi, il est important de vérifier que ces sous-projet soient tous bien ajsuté en ce qui concerne leur dépendance (surtout si vous rencontrez des erreurs de compilation qui découlent possiblement d'un souci à ce niveau).
+
+Ce qu'il faut vérifier en particulier c'est que :
+ - le projet de la lirbairie `hardwareLib` est bien calé sur la dernière version de la lirbairie `Scheduler`.
+ - que les projets des programmes à uploader sont bien calés sur les bonnes versions des 2 librairies : `hardwareLib` et `Scheduler`.
+
+Voici comment vérifier tout ça dans **VSCode**, et comment corriger en cas de souci :
+
+#### - Pour la librairie `hardwareLib` :
+- ouvrez l'un des fichier de cette librairie (par exemple `src/Pindef.h`)
+- cliquez ensuite sur le bouton `New Terminal` dans la barre d'action de **PlatformIO** (tout en bas)
+- cela va ouvrir une console PIO pour ce projet (le prompt doit commencer par `hardwareLib %`)
+- dans cette console tapez la commande : 
+```
+pio pkg list
+```
+- sur la dernière ligne affiché, vous devriez voir quelque chose qui commence par : `Scheduler @ 0.20.5 ...`
+    - dans cet exemple, les chiffre `0.20.5` indique que ce projet intègre la version 0.20.5 de la librairie `Scheduler`.
+    
+- allez maintenant sur le dépôt Git de la librairie `Scheduler` pour vérifier sa version actuelle : [https://gitlab.com/c-arduino/scheduler](https://gitlab.com/c-arduino/scheduler).
+- si vous n'avez pas la dernière version:
+    - tapez dans la console : `pio pkg update` puis `pio pkg list`. 
+    - Tapez ensuite une nouvelle fois ces 2 commandes : `pio pkg update` puis `pio pkg list` (il faut le faire deux fois pour que ce soit pris en compte).
+    - vous devriez maintenant voir le bon numéro de version s'afficher pour la librairie `Scheduler`.
+
+#### - Pour les autres sous-projets (chacun des programmes à uploader) :
+Cela fonctionne de la même façon pour vérifier si le numéro de version est bon. Mais la procédure de correction est différente ici.
+- ouvrez l'un des fichier du sous-projet (par exemple `plateformio.ini`)
+- cliquez ensuite sur le bouton `New Terminal` dans la barre d'action de **PlatformIO** (tout en bas)
+- cela va ouvrir une console PIO pour ce projet là (le prompt doit commencer par `NOM_DU_SS-PROJET %`)
+- dans cette console tapez la commande : 
+```
+pio pkg list
+```
+- comme ci-dessus, la dernière ligne affiche la version de la librairie `Scheduler` pris en compte pour ce sous-projet.
+- ici, si vous n'avez pas la dernière version de la librairie `Scheduler` vous devez taper ceci dans la console :
+```
+pio pkg update --library "https://gitlab.com/c-arduino/scheduler.git"
+```
+ - tapez une nouvelle fois cette même commande (la aussi, il faut le faire deux fois pour que ce soit pris en compte).
+Ensuite, si vous tapez à nouveau `pio pkg list`, vous devriez voir le bon numéro de version s'afficher.
+
+### 4 - Procédure de connexion USB du robot
 
 #### Pour brancher le robot :
 1. Allumer le robot avec son bouton on/off (on doit toujours commencer par l'alimenter sur sa batterie).
@@ -47,7 +91,7 @@ Voici les pages web à consulter pour une aide sur les sujets suivants :
 2. Mettre le robot sur OFF.
 
 
-### 4 - Gestion de la batterie
+### 5 - Gestion de la batterie
 
 Pour consulter la charge de la batterie il suffit de créer un objet `SensorINA219` :
 ``` cpp
@@ -73,7 +117,7 @@ Afin d'aider à cette surveillance, vous pouvez inclure dans vos programmes la t
 //...
 
 SensorINA219 capteurINA219; //affichage des données du capteur de tension/courant
-LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
+LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
 
 //...
 ```

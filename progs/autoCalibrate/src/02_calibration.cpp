@@ -23,7 +23,11 @@ NB: - cette classe log aussi l'état du capteur de ligne toutes les secondes
 #include "sensor/Qtr-3RC.h"
 #include "actuator/Motor.h"
 
-Led ledJaune(PIN_LED_JAUNE);//pour signaler la calibration (clignote= lancement / fixe=calibration en cours)
+NAMED_LED(ledJaune, PIN_LED_JAUNE, "Led Jaune -> signal de calibration"); //pour signaler la calibration (clignote= lancement / fixe=calibration en cours)
+// équivalent à :
+// Led ledJaune(PIN_LED_JAUNE);
+
+//Le capteur de ligne
 SensorQTR_3RC capteur;
 //Le buzzer
 Buzzer buzzer(PIN_BUZZER);
@@ -72,6 +76,8 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
           ledJaune.setOn(true);
           capteur.calibrate();
           //Debut de la danse
+          motors.setSmoth(10, 10); //on augmente la réactivité des moteurs 
+              //pour qu'ils répondent mieux aux mouvements rapides avanr-arrière
           _danse=DANSE_FORWARD;
           _pause=false;
         } else {
@@ -85,7 +91,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
           case SensorQTR_3RC::CALIBRATION: //la calibration est en cours     
             if(_pause) { //on fait une pause durant cette demi-période
               _pause=false;
-              motors.stop(false, true);
+              motors.stop();//motors.stop(false, true);
               LOG_INFO("LogQtr : ... Calibration en cours ...");
             } else { //on applique le mouvement de danse courant
               motors.move(_danse==DANSE_FORWARD ? FORWARD : BACKWARD, SPEED_DANSE);
@@ -96,6 +102,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
           case SensorQTR_3RC::READY:
             if(_danse!=NO_DANSE){ //On vient de terminer une danse de calibration, on doit arrêter la danse 
               _danse=NO_DANSE;
+              motors.resetSmoth(); //on restaure la réactivité des moteurs
               ledJaune.setOn(false);
               motors.stop();
               setPeriod(1000); //on restaure la periodicité à 1s
@@ -112,12 +119,14 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
 AutoCalib autoCalib; //activation de la tâche
 
 //Le bouton GRIS => permet de lancer la procédure de calibrage
-class BtCalibrate : public Button {
-  public :
-    SETNAME("BtCalibrate")         //on fixe le nom de cette tâche
-    BtCalibrate() : Button(PIN_BT_GRIS){}
-    void onPressed() override {
-      autoCalib.launchCalibration();
-    }
-};
-BtCalibrate btCalibre;
+ACTION_BUTTON(btCalibre, PIN_BT_GRIS, [](){ autoCalib.launchCalibration(); } , "Bouton Gris -> autoCalib");
+//--> cette nouvelle macro permet d'écrire plus simplement ce qu'on écrivait ainsi :
+// class BtCalibrate : public Button {
+//   public :
+//     SETNAME("Bouton Gris -> autoCalib")         //on fixe le nom de cette tâche
+//     BtCalibrate() : Button(PIN_BT_GRIS){}
+//     void onPressed() override {
+//       autoCalib.launchCalibration();
+//     }
+// };
+// BtCalibrate btCalibre;

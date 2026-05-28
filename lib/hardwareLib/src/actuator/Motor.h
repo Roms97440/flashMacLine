@@ -72,9 +72,13 @@ class SmothMotor : public Task { //moteur à correction de puissance et changeme
         _deltaF = deltaF == 0 ? 0 : (1.0+deltaF/100.0);
         _deltaB = deltaB == 0 ? 0 : (1.0+deltaB/100.0);
     }
-    void setSmoth(uint8_t step /*max 30*/, uint32_t period=0){ //re-configuration du smothing
+    void setSmoth(uint8_t step /*max 30*/, uint32_t period=0){ //re-configuration du smothing, par défaut : 5, 20
       _step = min(step, (uint8_t) 30);
       if(period!=0) setPeriod(period);
+    }
+    void resetSmoth(){ //reconfigure le smothing à sa valeur par défaut : 5, 20
+      _step=5;
+      setPeriod(20);
     }
 
     void move(bool sens, uint8_t speed,bool immediate=false){// Vitesse de 0 à 255
@@ -169,5 +173,14 @@ class BiMotor : public NeedInit { //la classe de gestion simplifiée des 2 moteu
     void stop(bool immediate=false, bool reverseSens=false){//arrêt des moteurs
       _motorR->stop(immediate, reverseSens);
       _motorL->stop(immediate, reverseSens); 
+    }
+
+    void setSmoth(uint8_t step /*max 30*/, uint32_t period=0){ //par défaut : 5, 20
+       _motorR->setSmoth(step, period);
+       _motorL->setSmoth(step, period);
+    }
+    void resetSmoth(){ //reconfigure le smothing à sa valeur par défaut : 5, 20
+      _motorR->resetSmoth();
+      _motorL->resetSmoth();
     }
 };

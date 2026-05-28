@@ -55,8 +55,16 @@ lib_deps =
 
  - include des autres fichiers sources `xxxx.cpp` :
  ``` cpp
-#define NO_MAIN_FILE  // /!\ pour tous les fichiers secondaires
-#include "Scheduler.h"
+#include "Runner.h"
+
+//éléments du robot (commenter ceux non nécessaires):
+#include "Pindef.h" //definitions des pins du robot
+#include "sensor/Button.h"
+#include "actuator/Led.h"
+#include "actuator/Buzzer.h"
+#include "sensor/Ina219.h"
+#include "sensor/Qtr-3RC.h"
+#include "actuator/Motor.h"
 
 //...
 ```

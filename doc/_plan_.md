@@ -17,7 +17,7 @@ Notez que cette [documentation est consultable en ligne sur cette page](https://
 
 ---
 
-Version du projet Falsh-MacLine : **v0.2.05**
+Version du projet Falsh-MacLine : **v0.4**
 
 1. [Aide général (important)](<./00_aide.md>)
 1. [Liste des programmes](<./01_listing.md>)
