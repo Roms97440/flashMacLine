@@ -66,7 +66,8 @@ class SmothMotor : public Task { //moteur à correction de puissance et changeme
     SETNAME("SmothMotor")
     SmothMotor(bool side, bool inversed=false, int8_t deltaF=0 , int8_t deltaB=0) 
      : Task(20, true, true), //période de 20ms + isochronisme pour le `soft speed`
-     _pinPWM(side ? PIN_M1_PWM : PIN_M2_PWM), _pinDIR(side ? PIN_M1_DIR : PIN_M2_DIR), _inversed(inversed), //Configuration de base
+     _pinPWM(side ? PIN_M1_PWM : PIN_M2_PWM), _pinDIR(side ? PIN_M1_DIR : PIN_M2_DIR), //affectation des moteur
+     _inversed(inversed), 
      _curSens(FORWARD), _targetSens(FORWARD), _curSpeed(0), _targetSpeed(0), _step(5) //configuration du `soft speed`
     {   //pré-calcul du coéfficient de compensation de force (pour l'équilibrage des roues)
         _deltaF = deltaF == 0 ? 0 : (1.0+deltaF/100.0);
@@ -99,6 +100,10 @@ class SmothMotor : public Task { //moteur à correction de puissance et changeme
         _curSpeed=0;
         analogWrite(_pinPWM, 0);
       }  
+    }
+
+    void boost(uint8_t intensity=40){ //impulse un bost artificiel pour débloquer l'état statique du Robot
+      _curSpeed = constrain(_curSpeed+intensity, 0, 250); 
     }
 
 /* #region(collapsed) Méthodes internes */  
@@ -182,5 +187,10 @@ class BiMotor : public NeedInit { //la classe de gestion simplifiée des 2 moteu
     void resetSmoth(){ //reconfigure le smothing à sa valeur par défaut : 5, 20
       _motorR->resetSmoth();
       _motorL->resetSmoth();
+    }
+
+    void boost(uint8_t intensity=40){ //impulse un bost artificiel pour débloquer l'état statique du Robot
+      _motorR->boost(intensity);
+      _motorL->boost(intensity);
     }
 };

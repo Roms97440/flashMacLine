@@ -13,8 +13,11 @@ Programme : TestRoue
 #include "actuator/Motor.h"
 
 
-Motor roueDroite(RIGHT,true); //activation de la tâche
-Motor roueGauche(LEFT);
+// Motor roueDroite(RIGHT,true); //activation de la tâche
+// Motor roueGauche(LEFT);
+
+SmothMotor roueDroite(RIGHT, true); 
+SmothMotor roueGauche(LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
 
 //Création des objets :
   //Les éléments de log
@@ -35,7 +38,8 @@ class BtBleu : public Button {
     BtBleu() : Button(PIN_BT_BLEU){}
     void onPressed() override {
        ledRouge.setOn(true);
-       roueGauche.forward(100); 
+       //roueGauche.forward(100); 
+       roueGauche.move(FORWARD, 100); 
     }
     void onReleased() override {
        //buzzer.bip();
@@ -51,7 +55,8 @@ class BtGris : public Button {
     BtGris() : Button(PIN_BT_GRIS){}
     void onPressed() override {
        ledJaune.setOn(true);
-       roueDroite.forward(100); 
+       //roueDroite.forward(100); 
+       roueDroite.move(FORWARD, 100); 
     }
     void onReleased() override {
         //buzzer.buzz();

@@ -55,6 +55,10 @@
 		{
 			"name": "autoCalibrate",
 			"path": "progs/autoCalibrate"
+		},
+		{
+			"name": "LineFollow",
+			"path": "progs/LineFollow"
 		}
 	],
 	"settings": {}
