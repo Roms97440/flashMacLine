@@ -15,6 +15,7 @@ Il met en place :
 #include "Pindef.h"         //definitions des pins du robot
 #include "sensor/Ina219.h"
 #include "actuator/Motor.h"
+#include "actuator/Buzzer.h"
 
 //Moniteur de ressource RAM/CPU
 RMonitor rmonitor;            //pour l'affichage de la consommation des ressources (cpu/mémoire)
@@ -29,5 +30,8 @@ LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
 
 //Configuration des moteurs (faire des essais TestForward pour ajuster le delta des roues si le mouvement dévie trop)
 SmothMotor _roueDroite(RIGHT,true); 
-SmothMotor _roueGauche(LEFT,false); 
+SmothMotor _roueGauche(LEFT,false,3,3); //la roue gauche semble 3% plus faible que la droite 
 BiMotor motors(_roueDroite, _roueGauche);
+
+//Le buzzer
+Buzzer buzzer(PIN_BUZZER);

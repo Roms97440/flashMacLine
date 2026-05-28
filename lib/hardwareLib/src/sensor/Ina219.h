@@ -133,10 +133,13 @@ protected:
     SensorINA219* _ina219;
     bool _blink;
     bool _isOn;
+    bool _firstSignal; //à true pour la capture du premier signal (il sera ignoré)
     const __FlashStringHelper* _name;
 /* #endregion */
 public: // API
-    LedBat(uint8_t pin, SensorINA219& ina219, const __FlashStringHelper* name=nullptr) : Task(1000), _pin(pin), _count(0), _ina219(&ina219), _blink(false),_isOn(false){}
+    LedBat(uint8_t pin, SensorINA219& ina219, const __FlashStringHelper* name=nullptr) 
+        : Task(1000), 
+        _pin(pin), _count(0), _ina219(&ina219), _blink(false),_isOn(false),_firstSignal(true), _name(name){}
 /* #region (implémentation interne) */
     void init() override {
         pinMode(_pin, OUTPUT);
@@ -151,7 +154,9 @@ public: // API
             _count=5;
             _blink=false;
             float bp = _ina219->batPourcent();
-            if(bp>=40) {
+            if(_firstSignal){ //on ignaure le premier signal (non significatif)
+                _firstSignal=false;
+            } else if(bp>=40) {
                 if(_isOn){
                     _isOn=false;
                     digitalWrite(_pin, LOW);                    

@@ -19,7 +19,9 @@ Idéalement, il faudrait même installer la cale de blocage de cette roue durant
 #include "Pindef.h" //definitions des pins du robot
 #include "sensor/Button.h"
 #include "actuator/Motor.h"
+#include "actuator/Buzzer.h"
 
+extern Buzzer buzzer;
 extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cpp
 constexpr uint8_t SPEED_FORWARD = 100; //constante de vitesse pour le TestForward
 
@@ -34,20 +36,29 @@ class TestForward : public Task { //pour faire avancer le robot pendant 10 secon
    void run() override {
     if(_count!=0){
       _count--;
-      if(_count==0) {
-        motors.stop();
-      }
+      if(_count==0) stop();
     }
    }
-   void start(uint8_t duree = 6) { //durre en seconde, 20 secondes maximum
-    _count=duree<20 ? duree*10 : 200;
-    motors.move(FORWARD,SPEED_FORWARD);
+   void start(uint8_t duree = 20) { //durre en seconde, 20 secondes maximum
+    if(_count==0){ //on lance le test
+      buzzer.notif(500,4,600);
+      _count=duree<20 ? duree*10 : 200;
+      motors.setSmoth(1,100);//on va augmenter la vitesse très lentenemnt => 10 unité par seconde
+      motors.move(FORWARD,SPEED_FORWARD);
+      //motors.move(BACKWARD,SPEED_FORWARD);
+    } else stop(); //on stoppe le test
+   }
+   void stop(){
+      _count=0;
+      motors.resetSmoth();
+      motors.stop(); //fin de test
+      buzzer.buzz(500, 2);    
    }
 };
 TestForward testForward; //activation de la tâche (remplacer aussi `_name_`)
 
 //Le bouton BLEU => Test de ligne droite (6 secondes)
-ACTION_BUTTON(btGoForward, PIN_BT_BLEU, [](){ testForward.start(6); } , "Bouton Bleu -> testForward");
+ACTION_BUTTON(btGoForward, PIN_BT_BLEU, [](){ testForward.start(); } , "Bouton Bleu -> testForward");
 //--> cette nouvelle macro permet d'écrire plus simplement ce qu'on écrivait ainsi :
 // class BtGoForward : public Button { //Pour lancer la tâche TestForward
 //   public :
