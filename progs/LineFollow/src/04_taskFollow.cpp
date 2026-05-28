@@ -36,14 +36,14 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
        //-> l'activité va se déclencher toutes les PERIODE ms
    void run() override {  
      // 2. Récupération de l'erreur
-     int16_t erreur = -capteur.deviation();
+     int16_t erreur = capteur.deviation();
      
      // 3. Calcul de la correction Proportionnelle
      int correction = erreur * Kp; 
      
      // 4. Calcul des vitesses théoriques (non bridées, peuvent être négatives)
-     int vGauche = vBase + correction;
-     int vDroite = vBase - correction;
+     int vGauche = vBase - correction;
+     int vDroite = vBase + correction;
      
      // 5. Déduction logique du sens pour chaque roue
      bool sensGauche = (vGauche >= 0) ? FORWARD : BACKWARD;

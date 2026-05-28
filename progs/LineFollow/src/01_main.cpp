@@ -49,7 +49,7 @@ BiButton biButton(btGris, btBleu);
 TaskCB bipArret([]{
   if(capteurINA219.courant()>=300){ //(count_boost ? 280 : 300)){
     //if(count_boost<2) count_boost++;
-    buzzer.notif(400);
-    motors.boost(/*count_boost* */ 50);
+      buzzer.notif(400);
+      motors.boost(50); //motors.boost( count_boost * 50);
   }// else if(count_boost!=0) count_boost--;
 },1000);
