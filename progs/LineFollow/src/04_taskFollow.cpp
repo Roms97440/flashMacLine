@@ -1,5 +1,6 @@
 //Fichier source secondaire: 
 #include "Runner.h"
+#include "00_config.h"
 
 /*  ===> Tâche principale pour le suivi de ligne !!!! 
 
@@ -82,11 +83,11 @@ SET_ACTION(setActionTaskFollow, biButton, BT2, []{ //action sur l'activation du 
 });
 
 
-
-//Ajustement des périodes des tâches principales (Capteur et TaskFollow)
+#ifdef LIGH_PERIOD
+//Allégement des périodes des tâches principales (Capteur et TaskFollow)
 void ajustTiming(){
   capteur.setPeriod(30);
   taskFollow.setPeriod(40);
 }
-//NeedInit initAjustTiming(ajustTiming,true);
-
+NeedInit initAjustTiming(ajustTiming,true);
+#endif

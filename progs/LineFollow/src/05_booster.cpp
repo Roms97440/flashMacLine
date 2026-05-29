@@ -1,10 +1,10 @@
 //Fichier source secondaire: 
 #include "Runner.h"
+#include "00_config.h"
 
 /*  ===> Patch en cas de blocage du robot (normalement inutile si le terrain est régulier)
-  -> à activer si nécessaire
+  -> à activer si nécessaire dans `00_config.h`
 */
-//#define ENABLE_BOOST    //à commenter pour désactiver (->fixer le choix du mode en fin de code)
 
 //=====================
 #ifdef ENABLE_BOOST
@@ -43,8 +43,11 @@ void cumulBoost(){
 }
 
 //Choix du mode
-TaskCB boostTask(monoBoost,1000);
-//TaskCB boostTask(cumulBoost,1000);
+ #if ENABLE_BOOST == _CUMUL
+  TaskCB boostTask(cumulBoost,1000);
+ #else
+  TaskCB boostTask(monoBoost,1000);
+ #endif
 
 #endif
 //=====================

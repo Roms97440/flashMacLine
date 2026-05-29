@@ -1,5 +1,6 @@
 //Fichier principal (le seul en inclure "Scheduler.h", les autres doivent inclure "Runner.h")
 #include "Scheduler.h"
+#include "00_config.h"
 
 /* ===> Ce code de base fixe les éléments essentiels du Robot.
 
@@ -10,7 +11,6 @@ Il met en place :
  - log de l'état de la batterie et son avertisseur LedRouge
 
 */
-
 #include "task/RMonitor.h"  //inclus déjà "Logger.h"
 #include "Pindef.h"         //definitions des pins du robot
 #include "sensor/Ina219.h"
@@ -19,8 +19,10 @@ Il met en place :
 #include "sensor/Button.h"
 
 //Moniteur de ressource RAM/CPU
+#if APP_LOG_LEVEL > LOG_LEVEL_NONE
 RMonitor rmonitor;            //pour l'affichage de la consommation des ressources (cpu/mémoire)
-  //--> à commenter pour la phase d'upload final (pour alléger le code embarqué)
+  //--> fixer APP_LOG_LEVEL sur LOG_LEVEL_NONE dans `00_config.h` pour alléger le code embarqué
+#endif
 
 //Gestion de la batterie
 SensorINA219 capteurINA219;   //affichage des données du capteur de tension/courant

@@ -1,5 +1,6 @@
 //Fichier source secondaire: 
 #include "Runner.h"
+#include "00_config.h"
 
 /*  ===> Tâche de réglage du coefficent delta du moteur faible (si nécessaire)
 
