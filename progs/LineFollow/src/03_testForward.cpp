@@ -1,5 +1,4 @@
 //Fichier source secondaire: 
-#include "Runner.h"
 #include "00_config.h"
 
 /*  ===> Tâche de réglage du coefficent delta du moteur faible (si nécessaire)
@@ -16,11 +15,11 @@
 NB: pour rendre ce calibrage plus efficace, au départ, il faut bien placer la roue libre droite dans le sens du mouvement.
 Idéalement, il faudrait même installer la cale de blocage de cette roue durant l'ensemble du test.
 */
-
-#include "Pindef.h" //definitions des pins du robot
+/* #region(close) les #include */
 #include "sensor/Button.h"
 #include "actuator/Motor.h"
 #include "actuator/Buzzer.h"
+/* #endregion */
 
 extern BiButton biButton;
 extern Buzzer buzzer;

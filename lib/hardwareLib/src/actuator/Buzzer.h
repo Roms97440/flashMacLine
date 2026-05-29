@@ -4,7 +4,7 @@
 
 class Buzzer : public Task {
 protected:
-/* #region (attributs internes) */
+/* #region(close) (attributs internes) */
     uint8_t _pin;
     uint8_t _repeat; //compteur de répétition
     uint16_t _frequency;

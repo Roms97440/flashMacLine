@@ -61,5 +61,15 @@
 			"path": "progs/LineFollow"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"maptz.regionfolder": {
+			"[cpp]": { 
+				"defaultFoldStartRegex": "/\\*[\\s]*#region\\(close\\)[\\s]*(.*)",
+				"foldEnd": "/* #endregion */",
+				"foldEndRegex": "/\\*[\\s]*#endregion",
+				"foldStart": "/* #region [NAME] */",
+				"foldStartRegex": "/\\*[\\s]*#region[\\s]*(.*)"
+			}
+		}
+	}
 }

@@ -1,19 +1,17 @@
 //Fichier source secondaire: 
-#include "Runner.h"
 #include "00_config.h"
 
 /*  ===> Tâche principale pour le suivi de ligne !!!! 
 
   -> cette tâche fait (normalement) avancer le robot le long de la ligne noire ;)
   
-
 */
-
-#include "Pindef.h" //definitions des pins du robot
+/* #region(close) les #include */
 #include "sensor/Button.h"
 #include "actuator/Motor.h"
 #include "actuator/Buzzer.h"
 #include "sensor/Qtr-3RC.h"
+/* #endregion */
 
 extern BiButton biButton;
 extern Buzzer buzzer;
@@ -83,6 +81,7 @@ SET_ACTION(setActionTaskFollow, biButton, BT2, []{ //action sur l'activation du 
 });
 
 
+/* #region la tâche ajustTiming */
 #ifdef LIGH_PERIOD
 //Allégement des périodes des tâches principales (Capteur et TaskFollow)
 void ajustTiming(){
@@ -91,3 +90,4 @@ void ajustTiming(){
 }
 NeedInit initAjustTiming(ajustTiming,true);
 #endif
+/* #endregion */

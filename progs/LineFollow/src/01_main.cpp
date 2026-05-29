@@ -1,5 +1,4 @@
-//Fichier principal (le seul en inclure "Scheduler.h", les autres doivent inclure "Runner.h")
-#include "Scheduler.h"
+#define _MAIN_FILE  //Fichier principal (le seul à définr _MAIN_FILE)
 #include "00_config.h"
 
 /* ===> Ce code de base fixe les éléments essentiels du Robot.
@@ -11,12 +10,13 @@ Il met en place :
  - log de l'état de la batterie et son avertisseur LedRouge
 
 */
+/* #region(close) les #include */
 #include "task/RMonitor.h"  //inclus déjà "Logger.h"
-#include "Pindef.h"         //definitions des pins du robot
 #include "sensor/Ina219.h"
 #include "actuator/Motor.h"
 #include "actuator/Buzzer.h"
 #include "sensor/Button.h"
+/* #endregion */
 
 //Moniteur de ressource RAM/CPU
 #if APP_LOG_LEVEL > LOG_LEVEL_NONE

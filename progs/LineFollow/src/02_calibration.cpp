@@ -1,5 +1,4 @@
 //Fichier source secondaire: 
-#include "Runner.h"
 #include "00_config.h"
 
 /* ===> Tâche de calibration automatique du capteur de ligne, par mouvement avant-arrière
@@ -17,12 +16,13 @@ NB: - cette classe log aussi l'état du capteur de ligne toutes les secondes
 
     - pour annuler la calibration (ou son lancement) appuyez simplement à nouveau sur le bouton GRIS.
 */
-#include "Pindef.h" //definitions des pins du robot
+/* #region(close) les #include */
 #include "sensor/Button.h"
 #include "actuator/Led.h"
 #include "actuator/Buzzer.h"
 #include "sensor/Qtr-3RC.h"
 #include "actuator/Motor.h"
+/* #endregion */
 
 NAMED_LED(ledJaune, PIN_LED_JAUNE, "Led Jaune -> signal de calibration"); //pour signaler la calibration (clignote= lancement / fixe=calibration en cours)
 // équivalent à :

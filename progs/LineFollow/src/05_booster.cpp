@@ -1,5 +1,4 @@
 //Fichier source secondaire: 
-#include "Runner.h"
 #include "00_config.h"
 
 /*  ===> Patch en cas de blocage du robot (normalement inutile si le terrain est régulier)
@@ -9,10 +8,11 @@
 //=====================
 #ifdef ENABLE_BOOST
 
+/* #region(close) les #include */
 #include "sensor/Ina219.h"
 #include "actuator/Buzzer.h"
 #include "actuator/Motor.h"
-
+/* #endregion */
 
 extern SensorINA219 capteurINA219;
 extern Buzzer buzzer;
