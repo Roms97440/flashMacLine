@@ -73,11 +73,20 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
         setEnabled(false);
    }
 };
-TaskFollow taskFollow; //activation de la tâche (remplacer aussi `_name_`)
+TaskFollow taskFollow;
 
-SET_ACTION(setActionTaskFollow, biButton, BT2, []{ //action sur l'activation simultanée des deux boutons
+SET_ACTION(setActionTaskFollow, biButton, BT2, []{ //action sur l'activation du bouton bleu
     
      if(taskFollow.isEnabled()) taskFollow.stop();
      else taskFollow.start();
 });
+
+
+
+//Ajustement des périodes des tâches principales (Capteur et TaskFollow)
+void ajustTiming(){
+  capteur.setPeriod(30);
+  taskFollow.setPeriod(40);
+}
+//NeedInit initAjustTiming(ajustTiming,true);
 

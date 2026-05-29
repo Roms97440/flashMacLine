@@ -119,7 +119,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
 };
 AutoCalib autoCalib; //activation de la tâche
 
-SET_ACTION(setActionAutoCalib, biButton, BT1, []{ //action sur l'activation simultanée des deux boutons
+SET_ACTION(setActionAutoCalib, biButton, BT1, []{ //action sur l'activation du bouton Gris
   //buzzer.bip(500, 1, 500);
    autoCalib.launchCalibration();
 });
