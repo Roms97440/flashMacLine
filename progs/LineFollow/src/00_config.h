@@ -21,7 +21,7 @@
 //#define SET_LOG_LEVEL LOG_LEVEL_NONE
 
 /* - Décommenter ci-dessous pour activer le mode boost (choisir entre _MONO et _MULTI )*/
-//#define ENABLE_BOOST  _MONO  
+#define ENABLE_BOOST  _MONO  
 //#define ENABLE_BOOST  _MULTI  
 
 /* - Décommenter ci-dessous pour alléger les périodes des tâches principales (Capteur et TaskFollow) 

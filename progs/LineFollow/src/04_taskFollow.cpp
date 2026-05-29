@@ -65,6 +65,7 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
      
 
      // 7. Envoi des consignes
+     //ajouter true en 3e param de move pour désactiver le smoothing
      roueGauche.move(sensGauche, pwmGauche);
      roueDroite.move(sensDroite, pwmDroite);
    }
