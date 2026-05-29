@@ -21,7 +21,7 @@ extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cp
 constexpr int seuilBoost = 300; 
 
 //Code mono-boost
-constexpr uint8_t boost = 50; 
+constexpr uint8_t boost = 20; 
 void monoBoost(){
   if(capteurINA219.courant()>=seuilBoost){ 
       buzzer.notif(400);
@@ -30,7 +30,7 @@ void monoBoost(){
 }
 
 //Code boost cumulatif
-constexpr uint8_t boost = 20;
+//constexpr uint8_t boost = 20;
 constexpr uint8_t maxBoost = 3;
 constexpr int seuilCumulate = seuilBoost-20;  
 uint8_t count_boost=0;

@@ -23,9 +23,14 @@ extern SmothMotor roueGauche;
 extern BiMotor motors;
 
 // Variables de réglage (à ajuster empiriquement)
-constexpr int vBase = 80; 
-constexpr float Kp = 0.16;
-
+constexpr int vBase = 150; //150
+constexpr float Kp = 0.2;//.20 correction insrtantannee
+constexpr float Kd=0.3;//derivé.15 smoothing correction
+constexpr float gain = 0.65;//.65 force de correction par rapport à la vitesse de base
+long dt =1;
+long dtpred=1;
+float lastErreur=0;
+int16_t erreur=0;
 class TaskFollow : public Task { //pour faire avancer le robot pendant 10 secondes.
  protected :
    //... données internes de cette tâche ...
@@ -34,15 +39,21 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
    TaskFollow() : Task(20, false) {} //on fixe ici la rythmique 
        //-> l'activité va se déclencher toutes les PERIODE ms
    void run() override {  
+
      // 2. Récupération de l'erreur
-     int16_t erreur = capteur.deviation();
+     lastErreur = erreur;
+     erreur = capteur.deviation();
      
+     dtpred=dt;
+     dt=micros();
      // 3. Calcul de la correction Proportionnelle
-     int correction = erreur * Kp; 
+     
+    float D = Kd * ((erreur - lastErreur) / (dt-dtpred));
+    int correction = erreur * Kp + D; 
      
      // 4. Calcul des vitesses théoriques (non bridées, peuvent être négatives)
-     int vGauche = vBase - correction;
-     int vDroite = vBase + correction;
+     int vGauche = vBase - correction*gain;
+     int vDroite = vBase + correction*gain;
      
      // 5. Déduction logique du sens pour chaque roue
      bool sensGauche = (vGauche >= 0) ? FORWARD : BACKWARD;
