@@ -12,12 +12,30 @@
 
 Ce deuxième essais reprend les mêmes bases que le programme initial `LineFollow` mais avec les ajustements suivants :
 
+#### 1.1 - Ajustements déjà en place :
+
 - La tâche `taskForward`, déclenchée sur l'action 3 (via l'appui simultané des 2 boutons), est remplacée par la tâche `testCalibrage` (voir la **section 2.3** ci-dessous).
+- Le lancement d'action (via l'appui sur les boutons) est maintenant confirmé par un nombre de bip correspondant au numéro de l'action : 
+  - 1 bip => action 1 (Bouton gris) => lance la calibration
+  - 2 bip => action 2 (Bouton bleu) => lance le suivi de ligne
+  - 3 bip => action 3 (les 2 boutons) => lance le test du calibrage
+
+- La fin d'une action (calibration, suivi de ligne, test du calibrage) est signalée par un son buzz. Cette annulation peut se faire :
+  - pour la calibration : à la fin du processus, ou avant en appuyant sur n'importe quel bouton.
+  - pour le suivi de ligne : à tout moment en appuyant sur n'importe quel bouton.
+  - pour le test du calibrage : en appuyant sur les 2 boutons en même temps.
+
+#### 1.2 - Prochains ajustement (en cours de codage) :
+
+- Optimisation du code interne du capteur de ligne.
+- Optimisation du code de la tâche de suivi de ligne (sans changer l'algo).
+- Ajout d'un moteur à impulsion : similaire aux moteurs smoth, mais avec un système d'impulsion pour les vitesses lentes afin de rouler très lentement sans être bloqué (pour les vitesses en dessous du seuil d'arrachement).
+- Ajout de système de détection de bloquage (quand le robot n'avance plus), et de perte de ligne (quand le robot n'est plus sur la ligne, et qu'il risque de pivoter dans le mauvais sens et la manquer).
 
 
-### 2 - Modalité d'usage avec le robot :
+### 2 - Modalité de lancement des 3 actions :
  
- - Bouton gris (BT1) => lance le calibrage (voir protocole ci-dessous)
+ - Bouton gris (BT1) => lance la calibration (voir protocole ci-dessous)
  - Bouton bleu (BT2) => lance le suivi de ligne
  - Les 2 boutons en même temps => test du calibrage (*nouveau*).
 
