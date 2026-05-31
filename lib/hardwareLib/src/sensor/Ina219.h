@@ -174,6 +174,15 @@ public: // API
     const __FlashStringHelper* name() override { 
         return _name==nullptr ? F("led alerte batterie") : _name;
     }
+    void setOn(bool v){ //forçage du pilotage de la led
+        if(_isOn!=v){
+            _isOn=v;
+            digitalWrite(_pin, _isOn ? HIGH : LOW);
+        }
+    }
+    void swap(){ //bascule l'état ON/OFF de la led
+        setOn(!_isOn);
+    }
 /* #endregion */
 };
 

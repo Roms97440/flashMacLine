@@ -59,6 +59,10 @@
 		{
 			"name": "LineFollow",
 			"path": "progs/LineFollow"
+		},
+		{
+			"name": "LineFollow-02",
+			"path": "progs/LineFollow-02"
 		}
 	],
 	"settings": {

@@ -68,6 +68,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
         buzzer.buzz(); //buzz court d'annulation
         return false;
       } else { //vrai lancement de la calibration
+        buzzer.bip(); // 1 bip pour cette action numéro 1
         setPeriod(500); //on passe en demi-période (donc 500ms durant le lancement et la calibration)
         _count=10; // 10 * 500ms = 5s => lancement de la calibration dans 5 secondes
         return true;
@@ -111,8 +112,8 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
               ledJaune.setOn(false);
               motors.stop();
               setPeriod(1000); //on restaure la periodicité à 1s
-              buzzer.bip(700, 3, 500); //3 bip pour signaler la fin de la calibration
-              biButton.closeAction(BiButton::BT2);
+              buzzer.buzz(800); //buzz pour signaler la fin de la calibration
+              biButton.closeAction(BiButton::BT1);
             } else {
               LOG_INFO("LogQtr : ** deviation =",capteur.deviation(),F("**     (v1 ="),capteur.values(0),F("v2 ="),capteur.values(1),F("v3 ="),capteur.values(2), F(")"));
             }
@@ -125,6 +126,5 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
 AutoCalib autoCalib; //activation de la tâche
 
 SET_ACTION(setActionAutoCalib, biButton, BT1, [](bool launch, uint8_t bt){ //action sur le bouton Gris
-  //buzzer.bip(500, 1, 500);
   return autoCalib.launchCalibration();
 });

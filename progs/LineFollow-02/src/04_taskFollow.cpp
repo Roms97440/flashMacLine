@@ -75,7 +75,7 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
 
    }
    void start() { 
-        buzzer.notif(200, 3, 200);
+        buzzer.bip(400, 2, 200);
         setEnabled(true);
    }
    void stop(){
