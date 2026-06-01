@@ -29,16 +29,15 @@ Ce deuxième essais reprend les mêmes bases que le programme initial `LineFollo
   - la charge CPU durant la calibration passe de 90% à 36%.
   - la charge CPU pour la lecture du capteur (après calibration) passe de 16% à 8%.
 
-- L'exécution de la tâche de suivie de ligne (TaskFollow) est maintenant liée à celle de la tâche de relevé de mesure du capteur de ligne (SensorQTR_3RC) : l'alogo de suivi de ligne sera donc toujours exécutée après la capture de la dernière mesure.
+- L'exécution de la tâche de suivie de ligne (TaskFollow) est maintenant liée à celle de la tâche de relevé de mesure du capteur de ligne (SensorQTR_3RC) : l'algo de suivi de ligne sera donc toujours exécuté après la capture de la dernière mesure.
 
 - Suppresion de la configuration LIGH_PERIOD (plus nécessaire après les 2 optimisations ci-dessus).
 
-- Réorganisation des classes pour les moteurs (`Motor.h`) : le gestionnaire **BiMotor** peut maitenant gérer des moteurs de n'importe quel type (basic, smoth, ect...), et dispose désormais de toutes les possibilités d'action sur ces moteurs évitant ainsi de devoir les manipuler en plus de l'objet **BiMotor** dans le code.
+- Réorganisation des classes pour les moteurs (`Motor.h`) : le gestionnaire **BiMotor** peut maitenant gérer des moteurs de n'importe quel type (basic, smoth, ect...), et dispose désormais de toutes les possibilités d'action sur ces moteurs évitant ainsi de devoir les manipuler séparément en plus de l'objet **BiMotor** dans le code.
 
 - Optimisation et lissage du code de la tâche de suivi de ligne (sans changer l'algo).
 
-- Ajout de la tâche Gardian (fichier `06_gardian.cpp`) : cette tâche essais de détecter les situations critiques dans lesquelles peut se trouver le robot,
-  afin de donner l'alerte pour que l'algo de pilotage puisse réagir de façon appropriée. Pour le moment, quand l'alerte est détectée : elle est signalée par un son et la led jaune, et la tâchde de suivi de ligne est simplement arrêtée. Si lors des essais au sol la détection est un succés, le code sera complété pour déclencher des vrais réaction sur le pilotage.
+- Ajout de la tâche **Gardian** (fichier `06_gardian.cpp`) : cette tâche essais de détecter les situations critiques dans lesquelles peut se trouver le robot, afin de donner l'alerte pour que l'algo de pilotage puisse réagir de façon appropriée. Pour le moment, quand l'alerte est détectée : elle est signalée par un son et la led jaune, et la tâchde de suivi de ligne est simplement arrêtée. Si lors des essais au sol la détection est un succés, le code sera complété pour déclencher des vrais réactions sur le pilotage.
 
 #### 1.2 - Prochains ajustement (en cours de codage) :
 
