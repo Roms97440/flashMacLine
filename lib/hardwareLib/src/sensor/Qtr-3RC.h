@@ -59,7 +59,7 @@ class SensorQTR_3RC : public Task {
 public :
     SETNAME("Sensor QTR_3RC")
     enum StateQTR { NEED_CALIBRATE, CALIBRATION, READY };
-/* #region(collapsed) Attributs internes */  
+/* #region(close) Attributs internes */  
   protected :
     QTRSensors _qtr;
     StateQTR _state;    //true si le capteur est ready
@@ -81,25 +81,30 @@ public : // API
         return (_values[0] < 200 && _values[1] < 200 && _values[2] < 200);
     }
 
-    void calibrate(int16_t count=500){ //lance un cyle de calibration
+    void calibrate(int16_t count=200){ //lance un cyle de calibration
         LOG_INFO("SensorQTR_3RC | début de calibration...");
         _qtr.resetCalibration();
         _state=CALIBRATION;
         _countCalibration=count;
+        setPeriod(50); //on passe sur une périodicité de 50ms durant la calibration
     }
     void cancelCalibration() {
         if (_state == CALIBRATION) {
             _countCalibration = 0;
             _state = NEED_CALIBRATE; // On force le retour à l'état non-calibré
             LOG_INFO("SensorQTR_3RC | Calibration annulée par l'utilisateur.");
+            setPeriod(20); //on repasse sur une périodicité de 20ms
         }
     }    
 
-/* #region(collapsed) Implémentation interne */
+/* #region(close) Implémentation interne */
     void init() override {
         _qtr.setTypeRC(); //configuration du capteur (Type RC)
         // Assignation des broches (dans l'ordre physique : gauche à droite)
         _qtr.setSensorPins((const uint8_t[]){PIN_QTR_GAUCHE, PIN_QTR_CENTRE, PIN_QTR_DROITE}, QTR_SENSOR_COUNT);
+
+        // Limite l'attente bloquante à 1250 µs au lieu de 2500 µs
+        _qtr.setTimeout(1250); //=> permet de faire tomber la charge CPU en dessous des 8% (au lieu des 16% habituelle).
     }
     void run() override {
         if(_countCalibration>0){ //une calibration est en court
@@ -108,6 +113,7 @@ public : // API
             if(_countCalibration<=0){ //fin de calibration
                _state=READY;
                LOG_INFO("SensorQTR_3RC | ... fin de calibration.");
+               setPeriod(20); //on repasse sur une périodicité de 20ms
             }
         } else {
             //Lecture de la position de la ligne noire

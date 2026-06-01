@@ -1,11 +1,7 @@
 //Fichier source secondaire: 
 #include "00_config.h"
+//  ===> Tâche principale pour le suivi de ligne !!!! 
 
-/*  ===> Tâche principale pour le suivi de ligne !!!! 
-
-  -> cette tâche fait (normalement) avancer le robot le long de la ligne noire ;)
-  
-*/
 /* #region(close) les #include */
 #include "sensor/Button.h"
 #include "actuator/Motor.h"
@@ -13,67 +9,87 @@
 #include "sensor/Qtr-3RC.h"
 /* #endregion */
 
+/* #region(close) les objets définis dans les autres fichiers */
 extern BiButton biButton;
 extern Buzzer buzzer;
-extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cpp
-
 extern SensorQTR_3RC capteur;
-extern SmothMotor roueDroite; 
-extern SmothMotor roueGauche; 
 extern BiMotor motors;
+/* #endregion */
 
-// Variables de réglage (à ajuster empiriquement)
+// ====  Constante de réglage (à ajuster empiriquement)  ====
+constexpr uint8_t maxSpeed = 90; //vittesse maximum des roues
 constexpr int vBase = 150; //150
-constexpr float Kp = 0.2;//.20 correction insrtantannee
+constexpr float Kp = 0.2;//.20 correction instantannée
 constexpr float Kd=0.3;//derivé.15 smoothing correction
 constexpr float gain = 0.65;//.65 force de correction par rapport à la vitesse de base
+// ====  ====  ====  ====  ====  ====  ====  ====  ====  ====
+
+// ***  Variables exploitées par l'algo de pilotage   ***
 long dt =1;
 long dtpred=1;
 float lastErreur=0;
 int16_t erreur=0;
-class TaskFollow : public Task { //pour faire avancer le robot pendant 10 secondes.
+// ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***
+
+/* #region(close) Code fixe avant l'algo de pilotage */
+class TaskFollow : public Task {
  protected :
    //... données internes de cette tâche ...
  public :
    SETNAME("TaskFollow") //nom affiché dans le bilan de lancement de RMonitor
-   TaskFollow() : Task(20, false) {} //on fixe ici la rythmique 
-       //-> l'activité va se déclencher toutes les PERIODE ms
+   TaskFollow() : Task(capteur, false) {} //cette tâche va suivre la rythmique du capteur de ligne 
+      //---> elle sera tjs exécutée après la tâche de relevé de mesure, soit tutes les 20ms
    void run() override {  
+/* #endregion */
 
-     // 2. Récupération de l'erreur
+//============> Alog de pilotage  <================
+
+     // 1. Récupération de l'erreur (la déviation)
      lastErreur = erreur;
      erreur = capteur.deviation();
      
      dtpred=dt;
      dt=micros();
-     // 3. Calcul de la correction Proportionnelle
-     
+
+     // 2. Calcul de la correction Proportionnelle
     float D = Kd * ((erreur - lastErreur) / (dt-dtpred));
     int correction = erreur * Kp + D; 
      
-     // 4. Calcul des vitesses théoriques (non bridées, peuvent être négatives)
+     // 3. Calcul des vitesses théoriques (non bridées, peuvent être négatives)
      int vGauche = vBase - correction*gain;
      int vDroite = vBase + correction*gain;
      
-     // 5. Déduction logique du sens pour chaque roue
-     bool sensGauche = (vGauche >= 0) ? FORWARD : BACKWARD;
-     bool sensDroite = (vDroite >= 0) ? FORWARD : BACKWARD;
+     // 4. Déduction logique du sens pour chaque roue (valeur négative -> changement de sens + passage de la valeur en positive)
+     bool sensGauche, sensDroite;
+     if(vGauche >= 0) sensGauche=FORWARD;
+     else {
+        sensGauche=BACKWARD;
+        vGauche=-vGauche;
+     }
+     if(vDroite >= 0) sensDroite=FORWARD;
+     else {
+        sensDroite=BACKWARD;
+        vDroite=-vDroite;
+     }
      
-     // 6. Extraction de la puissance absolue et bridage matériel (0-255)
-     uint8_t pwmGauche = constrain(abs(vGauche), 0, 90); //255);
-     uint8_t pwmDroite = constrain(abs(vDroite), 0, 90); //255);
+     // 5. Extraction de la puissance absolue et bridage matériel (0-maxSpeed)
+     uint8_t pwmGauche = min(vGauche, maxSpeed);
+     uint8_t pwmDroite = min(vDroite, maxSpeed);
      
-
-     // 7. Envoi des consignes
+     // 6. Envoi des consignes
      //ajouter true en 3e param de move pour désactiver le smoothing
-     roueGauche.move(sensGauche, pwmGauche);
-     roueDroite.move(sensDroite, pwmDroite);
+     motors.moveLR(sensGauche, pwmGauche, sensDroite, pwmDroite);
+
+//============  ============  ============  ============
+
+/* #region(close) Code fixe après l'algo de pilotage */     
    }
+
    void ajustSpeed(int16_t erreur){ //force ke le robot à ralentir si l'erreur est trop importante
      // int16_t abs_erreur = erreur>0 ? erreur : -erreur;
-     // if(abbs_erreur>750) 
-
+     // if(abbs_erreur>750)
    }
+
    void start() { 
         buzzer.bip(400, 2, 200);
         setEnabled(true);
@@ -85,6 +101,7 @@ class TaskFollow : public Task { //pour faire avancer le robot pendant 10 second
    }
 };
 TaskFollow taskFollow;
+Task* ptrTaskFollow = &taskFollow; //pour la tâche Gardian
 
 SET_ACTION(setActionTaskFollow, biButton, BT2, [](bool launch, uint8_t bt){ //action sur l'activation du bouton bleu
      if(launch) {
@@ -95,15 +112,5 @@ SET_ACTION(setActionTaskFollow, biButton, BT2, [](bool launch, uint8_t bt){ //ac
       return false;
      }
 });
-
-
-/* #region la tâche ajustTiming */
-#ifdef LIGH_PERIOD
-//Allégement des périodes des tâches principales (Capteur et TaskFollow)
-void ajustTiming(){
-  capteur.setPeriod(30);
-  taskFollow.setPeriod(40);
-}
-NeedInit initAjustTiming(ajustTiming,true);
-#endif
 /* #endregion */
+

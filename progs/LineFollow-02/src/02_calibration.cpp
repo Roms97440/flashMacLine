@@ -40,7 +40,7 @@ constexpr uint8_t SPEED_DANSE = 110;  //constante de vitesse pour les mouvements
 class AutoCalib : public Task { //Tâche de gestion de la calibration et des logs du capteur de ligne
   public :
     SETNAME("AutoCalib")
-/* #region(collapsed) (attributs internes) */
+/* #region(close) (attributs internes) */
     enum StateDanse{NO_DANSE, DANSE_FORWARD, DANSE_BACKWARD};
   protected :
     uint8_t _count;//compteur de lancement, si !=0 la calibration est en cours de lancement
@@ -74,7 +74,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
         return true;
       }
     }
-/* #region(collapsed) (implémentations internes) */
+/* #region(close) (implémentations internes) */
     void run() override {
       if(_count>0){//phase de lancement de la calibration
         _count--;

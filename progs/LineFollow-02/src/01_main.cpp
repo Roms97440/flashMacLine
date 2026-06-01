@@ -31,9 +31,12 @@ LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
   // LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
 
 
-//Configuration des moteurs (faire des essais TestForward pour ajuster le delta des roues si le mouvement dévie trop)
+//Configuration des moteurs 
 SmothMotor roueDroite(RIGHT, true); 
 SmothMotor roueGauche(LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
+  //-> Pour utiliser des moteurs basic, commenter les 2 lignes ci-dessus poour les remplacer par les 2 lignes ci-dessous
+//Motor roueDroite(RIGHT, true); 
+//Motor roueGauche(LEFT, false);
 BiMotor motors(roueDroite, roueGauche);
 
 //Le buzzer

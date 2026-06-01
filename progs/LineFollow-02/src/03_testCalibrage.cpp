@@ -7,9 +7,9 @@
 - appuyez sur les 2 boutons en même temps pour activer cette tâche (un tripple bip retentit)
 - notez quand dans cette tâche les roues ne tournent jamais.
 - placez le robot au sol, proche de la ligne noire, en le tenant face à vous (vous regardez les 2 triangles en bas du capot avant).
-- positionnez la ligne noire entre les traingles, ou volontairement désaxé par rapport à eux.
+- positionnez la ligne noire entre les triangles, ou volontairement désaxé par rapport à eux.
 - appuyez sur le bouton BLEU pour demander une mesure, un son de notification long retentit et les led jaune et/ou rouge s'allument pour indiquer la valeur de déviation (voir tableau ci-dessous).
-- faites des nouvelles mesures en décalant la ligne noire
+- faites des nouvelles mesures en décalant la ligne noire.
 - pour effacer la mesure (les led vont s'etteindre toutes les deux) : appuyez sur le bouton GRIS (deux son de notification retentissent)
 - pour quitter cette tâche : appuyez en même temps sur les 2 boutons (un buzz retentit).
 
