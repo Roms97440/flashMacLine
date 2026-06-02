@@ -110,6 +110,8 @@ class TaskGardian : public Task {
           break;
       }
    }
-  };
+};
+TaskGardian taskGardian;
+
 #endif
 //=====================

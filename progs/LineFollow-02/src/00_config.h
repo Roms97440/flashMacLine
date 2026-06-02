@@ -27,3 +27,5 @@
 /* - Décommenter ci-dessous pour activer l'objet Gardian (voir `06_gardian.cpp`) */
 #define ENABLE_GARDIAN  
 
+/* - Décommenter ci-dessous pour activer l'objet Sniffer (voir `07_sniffer.cpp`) */
+#define ENABLE_SNIFFER
