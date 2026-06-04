@@ -32,11 +32,11 @@ LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
 
 
 //Configuration des moteurs 
-SmothMotor roueDroite(RIGHT, true); 
-SmothMotor roueGauche(LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
+SmothMotor roueDroite(MV_RIGHT, true); 
+SmothMotor roueGauche(MV_LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
   //-> Pour utiliser des moteurs basic, commenter les 2 lignes ci-dessus poour les remplacer par les 2 lignes ci-dessous
-//Motor roueDroite(RIGHT, true); 
-//Motor roueGauche(LEFT, false);
+//Motor roueDroite(MV_RIGHT, true); 
+//Motor roueGauche(MV_LEFT, false);
 BiMotor motors(roueDroite, roueGauche);
 
 //Le buzzer

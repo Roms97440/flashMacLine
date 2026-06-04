@@ -13,11 +13,11 @@ Programme : TestRoue
 #include "actuator/Motor.h"
 
 
-// Motor roueDroite(RIGHT,true); //activation de la tâche
-// Motor roueGauche(LEFT);
+// Motor roueDroite(MV_RIGHT,true); //activation de la tâche
+// Motor roueGauche(MV_LEFT);
 
-SmothMotor roueDroite(RIGHT, true); 
-SmothMotor roueGauche(LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
+SmothMotor roueDroite(MV_RIGHT, true); 
+SmothMotor roueGauche(MV_LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
 
 //Création des objets :
   //Les éléments de log

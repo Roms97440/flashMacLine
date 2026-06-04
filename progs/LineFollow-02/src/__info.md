@@ -18,7 +18,8 @@ Ce deuxième essais reprend les mêmes bases que le programme initial `LineFollo
 - Le lancement d'action (via l'appui sur les boutons) est maintenant confirmé par un nombre de bip correspondant au numéro de l'action : 
   - 1 bip => action 1 (Bouton gris) => lance la calibration
   - 2 bip => action 2 (Bouton bleu) => lance le suivi de ligne
-  - 3 bip => action 3 (les 2 boutons) => lance le test du calibrage
+  - 3 bip => action 3 (les 2 boutons, relachement du bleu en 1er) => lance le test du calibrage
+  - 4 bip => action 4 (les 2 boutons, relachement du gris en 1er) => lance la tache sniffer (pour tester)
 
 - La fin d'une action (calibration, suivi de ligne, test du calibrage) est signalée par un son buzz. Cette annulation peut se faire :
   - pour la calibration : à la fin du processus, ou avant en appuyant sur n'importe quel bouton.

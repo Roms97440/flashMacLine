@@ -202,9 +202,9 @@ class BiMotor : public NeedInit { //la classe de gestion simplifiée des 2 moteu
     BiMotor(AbstractMotor& motorR, AbstractMotor& motorL) : NeedInit(), 
       _motorR(&motorR), _motorL(&motorL){}
     
-    void rotate(bool direction, uint8_t speed, bool immediate=false){// direction = RIGHT ou LEFT
-      _motorR->move(direction, speed, immediate);
-      _motorL->move(!direction, speed, immediate);
+    void rotate(bool direction, uint8_t speed, bool immediate=false){// direction = MV_RIGHT ou MV_LEFT
+      _motorR->move(!direction, speed, immediate);
+      _motorL->move(direction, speed, immediate);
     }
     void move(bool sens, uint8_t speed,bool immediate=false){// Vitesse de 0 à 255
       _motorR->move(sens, speed, immediate);

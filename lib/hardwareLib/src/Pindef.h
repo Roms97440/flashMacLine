@@ -39,8 +39,8 @@ constexpr uint8_t PIN_M2_DIR = 7;
 /* #endregion */
 
 /* #region Constantes générales */
-constexpr bool RIGHT = true;
-constexpr bool LEFT = false;
+constexpr bool MV_RIGHT = true;
+constexpr bool MV_LEFT = false;
 constexpr bool FORWARD = true;
 constexpr bool BACKWARD = false;
 /* #endregion */

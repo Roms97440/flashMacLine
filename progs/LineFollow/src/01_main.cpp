@@ -32,8 +32,8 @@ LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
 
 
 //Configuration des moteurs (faire des essais TestForward pour ajuster le delta des roues si le mouvement dévie trop)
-SmothMotor roueDroite(RIGHT, true); 
-SmothMotor roueGauche(LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
+SmothMotor roueDroite(MV_RIGHT, true); 
+SmothMotor roueGauche(MV_LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
 BiMotor motors(roueDroite, roueGauche);
 
 //Le buzzer
