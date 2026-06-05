@@ -17,12 +17,14 @@ Notez que cette [documentation est consultable en ligne sur cette page](https://
 
 ---
 
-Version du projet Falsh-MacLine : **v0.4**
+Version du projet Falsh-MacLine : **v0.6**
 
 1. [Aide général (important)](<./00_aide.md>)
 1. [Liste des programmes](<./01_listing.md>)
 1. [Modèle de code](<./02_base_code.md>)
 
+Le fichier d'information du dernier programme est consultable ici : 
+- [__info.md de LineFollow-02](./x_LineFollow-02_info.md)
 
 
 

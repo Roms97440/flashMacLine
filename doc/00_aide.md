@@ -37,7 +37,7 @@ Voici les pages web à consulter pour une aide sur les sujets suivants :
 
 ### 3 - Mises à jour, et vérification des dépendances 
 
-Comme vous l'aurez compris, le proget global comporte plusieurs sous-projet qui correspondent chacun à un projet PlatformIO (la librairie commune `hardwareLib`, et les différents programmes à uploader vers le robot). Aussi, il est important de vérifier que ces sous-projet soient tous bien ajsuté en ce qui concerne leur dépendance (surtout si vous rencontrez des erreurs de compilation qui découlent possiblement d'un souci à ce niveau).
+Comme vous l'aurez compris, le proget global comporte plusieurs sous-projet qui correspondent chacun à un projet PlatformIO (la librairie commune `hardwareLib`, et les différents programmes à uploader vers le robot). Aussi, il est important de vérifier que ces sous-projet soient tous bien ajustés en ce qui concerne leurs dépendances (surtout si vous rencontrez des erreurs de compilation qui découlent possiblement d'un souci à ce niveau).
 
 Ce qu'il faut vérifier en particulier c'est que :
  - le projet de la lirbairie `hardwareLib` est bien calé sur la dernière version de la lirbairie `Scheduler`.
@@ -66,7 +66,7 @@ pio pkg list
 Cela fonctionne de la même façon pour vérifier si le numéro de version est bon. Mais la procédure de correction est différente ici.
 - ouvrez l'un des fichier du sous-projet (par exemple `plateformio.ini`)
 - cliquez ensuite sur le bouton `New Terminal` dans la barre d'action de **PlatformIO** (tout en bas)
-- cela va ouvrir une console PIO pour ce projet là (le prompt doit commencer par `NOM_DU_SS-PROJET %`)
+- cela va ouvrir une console PIO pour ce projet là (le prompt doit commencer par `NOM_DU_SOUS-PROJET %`)
 - dans cette console tapez la commande : 
 ```
 pio pkg list
