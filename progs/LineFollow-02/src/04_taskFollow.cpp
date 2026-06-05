@@ -17,7 +17,7 @@ extern BiMotor motors;
 /* #endregion */
 
 // ====  Constante de réglage (à ajuster empiriquement)  ====
-constexpr uint8_t maxSpeed = 90; //vittesse maximum des roues
+constexpr uint8_t maxSpeed = 90; //vittesse maximum des roues (peut-être il faut l'augmenter un peu...)
 constexpr int vBase = 150; //150
 constexpr float Kp = 0.2;//.20 correction instantannée
 constexpr float Kd=0.3;//derivé.15 smoothing correction
