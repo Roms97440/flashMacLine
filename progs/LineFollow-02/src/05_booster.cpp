@@ -14,12 +14,19 @@
 #include "actuator/Motor.h"
 /* #endregion */
 
+/* #region(close) les objets définis dans les autres fichiers */
 extern SensorINA219 capteurINA219;
 extern Buzzer buzzer;
 extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cpp
+/* #endregion */
 
+// ==== constantes de réglage =============
 constexpr uint8_t boost = 20; 
 constexpr int seuilBoost = 300; 
+  //spécifique au boost cumulatif :
+constexpr uint8_t maxBoost = 3;
+constexpr int seuilCumulate = seuilBoost-20;  
+// ====  ====  ====  ====  ====  ====  ==== 
 
 //Code mono-boost
 void monoBoost(){
@@ -30,8 +37,6 @@ void monoBoost(){
 }
 
 //Code boost cumulatif
-constexpr uint8_t maxBoost = 3;
-constexpr int seuilCumulate = seuilBoost-20;  
 uint8_t count_boost=0;
 void cumulBoost(){
   if(capteurINA219.courant()>= (count_boost ? seuilCumulate : seuilBoost)){

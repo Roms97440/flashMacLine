@@ -23,6 +23,7 @@ public: //API
   virtual void backward(uint8_t speed, bool immediate=false) = 0;
   virtual void move(bool sens, uint8_t speed,bool immediate=false) = 0;
   virtual void stop(bool immediate=false, bool reverseSens=false) = 0;
+  virtual void boost(uint8_t intensity=40) = 0; //impulse un bost artificiel pour débloquer l'état statique du Robot
 
 /* #region(close) Méthodes internes */ 
 /* A utiliser ainsi dans les classes filles de NeedInit ou Task
@@ -36,26 +37,38 @@ public: //API
 };
 
 class Motor : public AbstractMotor, public NeedInit { //Moteur brute (sans raffinement)
+/* #region(close) Attributs internes */
+  protected :  
+    uint8_t _curSpeed;  //vitesse actuelle appliquée au moteur
+/* #endregion */  
   public : //API
     SETNAME("Motor")
-    Motor(bool side, bool inversed=false) : AbstractMotor(TypeMotor::BASIC, side, inversed), NeedInit(){}
+    Motor(bool side, bool inversed=false) : AbstractMotor(TypeMotor::BASIC, side, inversed), NeedInit(), _curSpeed(0){}
     void init() override { AbstractMotor::init(); }
 
     void forward(uint8_t speed, bool immediate=false) override { //immediate ignorée
+      _curSpeed=speed;
       digitalWrite(_pinDIR, _inversed ? LOW : HIGH);
       analogWrite(_pinPWM, speed); 
     }
     void backward(uint8_t speed, bool immediate=false) override { //immediate ignorée
+      _curSpeed=speed;
       digitalWrite(_pinDIR, _inversed ? HIGH : LOW);
       analogWrite(_pinPWM, speed);
     }
     void move(bool sens, uint8_t speed,bool immediate=false) override { //immediate ignorée
+      _curSpeed=speed;
        digitalWrite(_pinDIR, (sens != _inversed) ? HIGH : LOW); 
        analogWrite(_pinPWM, speed);
     }
     void stop(bool immediate=false, bool reverseSens=false) override {
+      _curSpeed=0;
       analogWrite(_pinPWM, 0);
     }  
+    void boost(uint8_t intensity=40) override { //impulse un bost artificiel pour débloquer l'état statique du Robot
+      _curSpeed = min(_curSpeed+intensity, 250); 
+      analogWrite(_pinPWM, _curSpeed);
+    }    
 };
 
 class SmothMotor : public AbstractMotor, public Task { //moteur à correction de puissance et changement de vitesse progressif (`soft speed`)
@@ -79,10 +92,12 @@ class SmothMotor : public AbstractMotor, public Task { //moteur à correction de
 
   public : // API
     SETNAME("SmothMotor")
-    SmothMotor(bool side, bool inversed=false, int8_t deltaF=0 , int8_t deltaB=0) 
-     : AbstractMotor(TypeMotor::SMOTH, side, inversed), Task(20, true, true), //période de 20ms + isochronisme pour le `soft speed`
-     _curSens(FORWARD), _targetSens(FORWARD), _curSpeed(0), _targetSpeed(0), _step(5) //configuration du `soft speed`
-    {   //pré-calcul du coéfficient de compensation de force (pour l'équilibrage des roues)
+    SmothMotor(bool side, bool inversed=false, int8_t deltaF=0 , int8_t deltaB=0, uint8_t step=5 /*max 30*/) 
+     : AbstractMotor(TypeMotor::SMOTH, side, inversed), Task(10, true, true), //période de 20ms + isochronisme pour le `soft speed`
+     _curSens(FORWARD), _targetSens(FORWARD), _curSpeed(0), _targetSpeed(0) //configuration du `soft speed`
+    {   
+        _step = min(step, (uint8_t) 30);
+        //pré-calcul du coéfficient de compensation de force (pour l'équilibrage des roues)
         _deltaF = deltaF == 0 ? 0 : (1.0+deltaF/100.0);
         _deltaB = deltaB == 0 ? 0 : (1.0+deltaB/100.0);
     }
@@ -138,7 +153,7 @@ class SmothMotor : public AbstractMotor, public Task { //moteur à correction de
       _step=5;
       setPeriod(20);
     }
-    void boost(uint8_t intensity=40){ //impulse un bost artificiel pour débloquer l'état statique du Robot
+    void boost(uint8_t intensity=40) override { //impulse un bost artificiel pour débloquer l'état statique du Robot
       _curSpeed = min(_curSpeed+intensity, 250); 
     }
 
@@ -228,8 +243,8 @@ class BiMotor : public NeedInit { //la classe de gestion simplifiée des 2 moteu
       if(_motorR->type==TypeMotor::SMOTH) ((SmothMotor*) _motorR)->resetSmoth();
       if(_motorL->type==TypeMotor::SMOTH) ((SmothMotor*) _motorL)->resetSmoth();
     }
-    void boost(uint8_t intensity=40){ //impulse un bost artificiel pour débloquer l'état statique du Robot, ignoré si le moteur n'est pas du type TypeMotor::SMOTH
-      if(_motorR->type==TypeMotor::SMOTH) ((SmothMotor*) _motorR)->boost(intensity);
-      if(_motorL->type==TypeMotor::SMOTH) ((SmothMotor*) _motorL)->boost(intensity);
+    void boost(uint8_t intensity=40){ //impulse un bost artificiel pour débloquer l'état statique du Robot
+      _motorR->boost(intensity);
+      _motorL->boost(intensity);
     }
 };

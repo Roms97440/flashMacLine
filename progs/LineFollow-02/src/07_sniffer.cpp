@@ -40,11 +40,13 @@ extern Task* ptrTaskFollow;
 extern Led ledJaune;  //pour la led jaune (définit dans 02_calibragtion.cpp)
 /* #endregion */
 
-//constante de réglage
+// == constantes de réglage =============
 constexpr uint8_t speedTS = 80; //vitesse des rotations 
 constexpr uint8_t catchWin = 4; //nombre de capture positive de la ligne concécutive avant de conclure qu'on l'a retrouvé
-constexpr uint8_t maxPhase = 8; //nbr de phase maximum
+constexpr uint8_t maxPhase = 8; //nbr de phase maximum (1 phase = rotation dans un sens)
 constexpr int16_t stepPhase = 100; //durée du pas des phases de rotation en nombre de cycle de 20 ms.  100 => 2s
+constexpr bool followIfFound = true; //mettre à false si le robot doit simplement tout arrêter quand il a retrouvé la ligne
+// ====  ====  ====  ====  ====  ====  ==== 
 
 class TaskSniffer : public Task {
  public :
@@ -91,6 +93,7 @@ class TaskSniffer : public Task {
             ledJaune.setOn(false);
             _move=NONE;
             setEnabled(false);
+            if(followIfFound) ptrTaskFollow->setEnabled(true);
           }
         }
 
@@ -138,6 +141,7 @@ class TaskSniffer : public Task {
    }
 };
 TaskSniffer taskSniffer;
+Task* ptrTaskSniffer = &taskSniffer; //pour la tâche Gardian
 
 SET_ACTION(setActionTaskSniffer, biButton, ALL_BT1R, [](bool launch, uint8_t bt){ //action : 2 boutons, puis relâche du gris
      if(launch) {

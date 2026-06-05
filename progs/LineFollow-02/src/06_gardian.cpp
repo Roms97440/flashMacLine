@@ -39,7 +39,16 @@ extern SensorQTR_3RC capteur;
 extern BiMotor motors;
 extern Task* ptrTaskFollow;
 extern Led ledJaune;  //pour la led jaune (définit dans 02_calibragtion.cpp)
+#ifdef ENABLE_SNIFFER   
+  extern Task* ptrTaskSniffer; 
+#endif
 /* #endregion */
+
+// ==== constantes de réglage =============
+constexpr bool boostIfBlocked = true; //mettre à false si le robot doit simplement tout arrêter quand il est bloqué
+constexpr uint8_t boostMax = 120; //si le boost atteint cette limite lors des tentatives de déblockage "robot immobile", le robot abandonne
+constexpr uint8_t boostStep = 20; //valeur d'augmentation du boost à chaque tentative successive de déblocage
+// ====  ====  ====  ====  ====  ====  ==== 
 
 class TaskGardian : public Task {
  public :
@@ -48,10 +57,11 @@ class TaskGardian : public Task {
     uint8_t _countLost;    //compteur de perte de ligne -> alerte s'il arrive à 50 (=> 1 secondes)
     uint8_t _countBlocked; //compteur robot immobile -> alerte s'il arrive à 100 (=> 2 secondes)
     int16_t _lastDeviation;
+    uint8_t _boostIntensity; //intensité cumulative du boost, maximum 
     Alerte _alerte;     //alerte actuelle
  public :
    SETNAME("TaskGardian") //nom affiché dans le bilan de lancement de RMonitor
-   TaskGardian() : Task(capteur, true, true),  _countLost(0), _countBlocked(0), _lastDeviation(2000), _alerte(NONE) {} //cette tâche va suivre la rythmique du capteur de ligne 
+   TaskGardian() : Task(capteur, true, true),  _countLost(0), _countBlocked(0), _lastDeviation(2000), _boostIntensity(boostStep), _alerte(NONE) {} //cette tâche va suivre la rythmique du capteur de ligne 
       //---> elle sera tjs exécutée après la tâche de relevé de mesure, soit toutes les 20ms
    void run() override {  
       switch(_alerte){
@@ -65,6 +75,10 @@ class TaskGardian : public Task {
               motors.stop(); //on coupe les moteurs
               buzzer.buzz(1500); //buzz long
               _countLost=0;
+              #ifdef ENABLE_SNIFFER   
+                //si la tâche sniffer est activée dans la configuration, on la lance
+                ptrTaskSniffer->setEnabled(true);
+              #endif
               break; //on sort du switch
             }
           } else _countLost=0;
@@ -74,15 +88,23 @@ class TaskGardian : public Task {
             if(ptrTaskFollow->isEnabled() && _lastDeviation==newDeviation){
               _countBlocked++;
               if(_countBlocked>=100){ //alerte robot immobile
-                _alerte=BLOCKED;
-                ptrTaskFollow->setEnabled(false); //on arrête la tâche de suivi de ligne
-                motors.stop(); //on coupe les moteurs
+                ledJaune.setOn(true);
                 buzzer.buzz(750, 2, 600); //2 buzz moyens
                 _countBlocked=0;
+                if(boostIfBlocked && _boostIntensity<=boostMax){ //on va appliquer un boost de débloquage de plus en plus intense (toutes les 2 secondes)
+                  motors.boost(_boostIntensity); //on applique un boost
+                  _boostIntensity+=boostStep;
+                } else { //sinon, on arrête tout
+                  _alerte=BLOCKED;
+                  motors.stop(); //on coupe les moteurs
+                  ptrTaskFollow->setEnabled(false); //on arrête la tâche de suivi de ligne
+                }
                 break; //on sort du switch
               }
             } else {
+              ledJaune.setOn(false);
               _countBlocked=0;
+              _boostIntensity=boostStep;
               _lastDeviation=newDeviation;
             }
           }

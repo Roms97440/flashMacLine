@@ -24,6 +24,7 @@ Vue face à la voiture (l'avant du capot nous fait face) : la ligne noire est XX
 
 NB: pendant l'exécution de cette tâche, la tâche LedBat (avertisseur de batterie) est désactivée pour libérer l'usage de la led rouge.
 */
+
 /* #region(close) les #include */
 #include "sensor/Button.h"
 #include "actuator/Buzzer.h"
@@ -32,11 +33,13 @@ NB: pendant l'exécution de cette tâche, la tâche LedBat (avertisseur de batte
 #include "sensor/Qtr-3RC.h"
 /* #endregion */
 
+/* #region(close) les objets définis dans les autres fichiers */
 extern SensorQTR_3RC capteur;
 extern BiButton biButton;
 extern Buzzer buzzer;
 extern LedBat ledBat; //pour la led rouge (définit dans 01_main.cpp)
 extern Led ledJaune;  //pour la led jaune (définit dans 02_calibragtion.cpp)
+/* #endregion */
 
 class TestCalibrage : public Task { //pour faire avancer le robot pendant 10 secondes.
  protected :

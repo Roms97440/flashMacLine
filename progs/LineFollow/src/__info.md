@@ -4,6 +4,8 @@
 
 ### /!\ vous devez mettre à jour la librairie Scheduler vers v0.23.2 ou + /!\
 
+voir la **section 3** sur cette page : [https://doc.payet.top/flashmcline/00_aide.md](https://doc.payet.top/flashmcline/00_aide.md)
+
 </center>
 
 ---

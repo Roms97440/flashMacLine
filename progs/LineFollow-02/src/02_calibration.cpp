@@ -30,12 +30,16 @@ NAMED_LED(ledJaune, PIN_LED_JAUNE, "Led Jaune -> signal de calibration"); //pour
 
 //Le capteur de ligne
 SensorQTR_3RC capteur;
-//Le buzzer
-extern Buzzer buzzer;
 
+/* #region(close) les objets définis dans les autres fichiers */
+extern Buzzer buzzer;
 extern BiButton biButton;
 extern BiMotor motors; //les moteurs sont configurés dans le fichier 01_main.cpp
+/* #endregion */
+
+// ==== constantes de réglage =============
 constexpr uint8_t SPEED_DANSE = 110;  //constante de vitesse pour les mouvements de danse de la calibration automatique
+// ====  ====  ====  ====  ====  ====  ==== 
 
 class AutoCalib : public Task { //Tâche de gestion de la calibration et des logs du capteur de ligne
   public :

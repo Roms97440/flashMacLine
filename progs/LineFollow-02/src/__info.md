@@ -4,6 +4,7 @@
 
 ### /!\ vous devez mettre à jour la librairie Scheduler vers v0.24 ou + /!\
 
+voir la **section 3** sur cette page : [https://doc.payet.top/flashmcline/00_aide.md](https://doc.payet.top/flashmcline/00_aide.md)
 </center>
 
 ---
@@ -12,43 +13,51 @@
 
 Ce deuxième essais reprend les mêmes bases que le programme initial `LineFollow` mais avec les ajustements suivants :
 
-#### 1.1 - Ajustements déjà en place :
-
-- La tâche `taskForward`, déclenchée sur l'action 3 (via l'appui simultané des 2 boutons), est remplacée par la tâche `testCalibrage` (voir la **section 2.3** ci-dessous).
-- Le lancement d'action (via l'appui sur les boutons) est maintenant confirmé par un nombre de bip correspondant au numéro de l'action : 
+- (A) La tâche `taskForward`, déclenchée sur l'action 3 (via l'appui simultané des 2 boutons), est remplacée par la tâche `testCalibrage` (voir la **section 2.3** ci-dessous).
+- (B) Le lancement d'action (via l'appui sur les boutons) est maintenant confirmé par un nombre de bip correspondant au numéro de l'action : 
   - 1 bip => action 1 (Bouton gris) => lance la calibration
   - 2 bip => action 2 (Bouton bleu) => lance le suivi de ligne
   - 3 bip => action 3 (les 2 boutons, relachement du bleu en 1er) => lance le test du calibrage
   - 4 bip => action 4 (les 2 boutons, relachement du gris en 1er) => lance la tache sniffer (pour tester)
 
-- La fin d'une action (calibration, suivi de ligne, test du calibrage) est signalée par un son buzz. Cette annulation peut se faire :
+- (C) La fin d'une action (calibration, suivi de ligne, test du calibrage) est signalée par un son buzz. Cette annulation peut se faire :
   - pour la calibration : à la fin du processus, ou avant en appuyant sur n'importe quel bouton.
   - pour le suivi de ligne : à tout moment en appuyant sur n'importe quel bouton.
   - pour le test du calibrage : en appuyant sur les 2 boutons en même temps.
+  - pour un essaus de la tâche sniffer : à tout moment en appuyant sur n'importe quel bouton.
 
-- Optimisation du code interne du capteur de ligne :
-  - la charge CPU durant la calibration passe de 90% à 36%.
+- (D) Optimisation du code interne du capteur de ligne :
+  - la charge CPU durant la calibration passe de 90% à 36% (voir possiblement à 20%).
   - la charge CPU pour la lecture du capteur (après calibration) passe de 16% à 8%.
 
-- L'exécution de la tâche de suivie de ligne (TaskFollow) est maintenant liée à celle de la tâche de relevé de mesure du capteur de ligne (SensorQTR_3RC) : l'algo de suivi de ligne sera donc toujours exécuté après la capture de la dernière mesure.
+- (E) L'exécution de la tâche de suivie de ligne (TaskFollow) est maintenant liée à celle de la tâche de relevé de mesure du capteur de ligne (SensorQTR_3RC) : l'algo de suivi de ligne sera donc toujours exécuté après la capture de la dernière mesure.
 
-- Suppresion de la configuration LIGH_PERIOD (plus nécessaire après les 2 optimisations ci-dessus).
+- (F) Suppresion de la configuration LIGH_PERIOD (plus nécessaire après les 2 optimisations ci-dessus).
 
-- Réorganisation des classes pour les moteurs (`Motor.h`) : le gestionnaire **BiMotor** peut maitenant gérer des moteurs de n'importe quel type (basic, smoth, ect...), et dispose désormais de toutes les possibilités d'action sur ces moteurs évitant ainsi de devoir les manipuler séparément en plus de l'objet **BiMotor** dans le code.
+- (G) Réorganisation des classes pour les moteurs (`Motor.h`) : le gestionnaire **BiMotor** peut maitenant gérer des moteurs de n'importe quel type (basic, smoth, ect...), et dispose désormais de toutes les possibilités d'action sur ces moteurs évitant ainsi de devoir les manipuler séparément en plus de l'objet **BiMotor** dans le code.
 
-- Optimisation et lissage du code de la tâche de suivi de ligne (sans changer l'algo).
+- (H) Augmentation de la réactivité de base des moteurs Smoth. De plus, la valeur du **step** (le pas de convergence de la vitesse vers celle demandée) peut maintenant être fixée à la création de l'objet moteur. Cette possibilité est utilisée dans le code pour définir le type de moteur **Réactif** dont le step est fixé à son maximum 30. Pour choisir ce type de moteur il vous suffit de sélectionner `#define USE_MOTOR _REACTIF` dans le fichier `00_config.h`.
 
-- Ajout de la tâche **Gardian** (fichier `06_gardian.cpp`) : cette tâche essais de détecter les situations critiques dans lesquelles peut se trouver le robot, afin de donner l'alerte pour que l'algo de pilotage puisse réagir de façon appropriée. Pour le moment, quand l'alerte est détectée : elle est signalée par un son et la led jaune, et la tâchde de suivi de ligne est simplement arrêtée. Si lors des essais au sol la détection est un succés, le code sera complété pour déclencher des vrais réactions sur le pilotage.
+- (I) Optimisation et lissage du code de la tâche de suivi de ligne (sans changer l'algo). Des blocs `region folding` auto-fermés ont été ajoutés pour permettre une vue directe sur le code de l'algo et ses constantes de réglage.
 
-#### 1.2 - Prochains ajustement (en cours de codage) :
+- (J) Ajout de la tâche **Gardian** (fichier `06_gardian.cpp`) : cette tâche essais de détecter les situations critiques dans lesquelles peut se trouver le robot, afin de donner l'alerte pour lancer une réaction appropriée. Quand une alerte est détectée elle est signalée par un son et la led jaune, et la tâche de suivi de ligne est mise en pause. La réaction à l'alerte est la suivante :
+  - s'il s'agit d'une alerte "perte de la ligne noire" : un son buzz long se produit, et la led jaune clignote. Si la tâche Sniffer (voir (K) ci-dessous) est activée dans la configuration, elle est lancée. Sinon, le robot restera comme ça avec la led jaune clinotante (relancez la tâche de suivi de ligne pour revenir à la normale).
+  - s'il 'agit d'une alerte "robot immobilisé" : 2 son buzz moyen se produisent, et la led jaune reste fixe. Un boost direct (il ne s'agit pas la du booster `05_booster.cpp`, donc le mode boost peut être laissé désactivé dans `00_config.h`) est alors appliqué, et devient de plus en plus instense si le blocage persiste. Au bout d'un certains seuil d'intensité (réglable dans le code juste avant la classe Gardian), le robot coupera les moteurs et restera comme ça avec la led jaune fixe (relancez la tâche de suivi de ligne pour revenir à la normale).
 
-- Ajout d'un moteur à impulsion : similaire aux moteurs smoth, mais avec un système d'impulsion pour les vitesses lentes afin de rouler très lentement sans être bloqué (pour les vitesses en dessous du seuil d'arrachement).
+- (K) Ajout de la tâche Sniffer (fichier `07_sniffer.cpp`) : cette tâche essais de retrouver la ligne noire en réalisant des mouvements de rotation droite-gauche de plus en plus large. Le calibrage de cette tâche peut être réalisé en ajustant les constantes de réglages dans le code juste avant la classe Sniffer. Cette tâche peut aussi être testée de façon isolée via le déclenchement de l'action 4 (voir section 2.4).
 
-### 2 - Modalité de lancement des 3 actions :
+- (L) Les réglages des paramètres et des constantes se font à 2 niveaux :
+  - réglages généraux : dans le fichier `00_config.h` (il n'est plus nécessaire de modifier le fichier `01_main.cpp`). En général c'est des `#define` à commenter ou à décommenter.
+  - réglages spécifiques à une tâche : dans le fichier d'implémentation de la tâche, juste avant le code de sa classe (zone marquée par `// == constantes de réglage ==` et ). En général c'est des valeurs à changer pour des constantes `constexpr`.
+
+A noter que les nouvelles tâches **Gardian** et **Sniffer** peuvent être activées/désactivées dans `config.h`. Si elles sont toutes les 2 désactivées, ce programme **LineFollow-02** se comportera alors de façon identique avec la version 1, avec juste les optimisations (A) à (I).
+
+### 2 - Modalité de lancement des 4 actions :
  
  - Bouton gris (BT1) => lance la calibration (voir protocole ci-dessous).
  - Bouton bleu (BT2) => lance le suivi de ligne.
- - Les 2 boutons en même temps => test du calibrage (*nouveau*).
+ - Les 2 boutons en même temps et relachement du bleu en 1er => test du calibrage (*nouveau*).
+ - Les 2 boutons en même temps et relachement du gris en 1er =>  lance la tache sniffer pour tester la recherche de ligne (placez le robot à droite ou à gauche de la ligne).
 
 #### 2.1 -  Protocole de calibration  (le bouton GRIS -> 1 bip) :
 - placez le robot au sol, perpendiculairement à la ligne, le capteur juste avant la ligne (sur du blanc).
@@ -64,8 +73,8 @@ Ce deuxième essais reprend les mêmes bases que le programme initial `LineFollo
 - appuyez sur le bouton BLEU (un double bip retentit), et le robot avance en suivant la ligne.
 - pour mettre fin à cette tâche : appuyez sur n'importe quel bouton (un buzz retentit).
 
-#### 2.3 - Protocole du test de calibrage (les 2 boutons en même temps -> 3 bip) :
-- appuyez sur les 2 boutons en même temps pour activer cette tâche (un tripple bip retentit)
+#### 2.3 - Protocole du test de calibrage (les 2 boutons en même temps + bouton bleu relaché en 1er -> 3 bip) :
+- appuyez sur les 2 boutons en même temps pour activer cette tâche, et relacher le bouton bleu en 1er (un tripple bip retentit)
 - notez quand dans cette tâche les roues ne tournent jamais.
 - placez le robot au sol, proche de la ligne noire, en le tenant face à vous (vous regardez les 2 triangles en bas du capot avant).
 - positionnez la ligne noire entre les triangles, ou volontairement désaxé par rapport à eux.
@@ -90,3 +99,15 @@ Vue face à la voiture (l'avant du capot nous fait face), suite à la demande d'
 
 **NB:** pendant l'exécution de cette tâche, la tâche **LedBat** (avertisseur de batterie) est désactivée pour libérer l'usage de la led rouge.
 
+#### 2.4 - Protocole du test Sniffer (les 2 boutons en même temps + bouton gris relaché en 1er -> 4 bip) :
+
+- assurez-vous que la tâche **Sniffer** est bien acvtivée dans  `00_config.h`.
+- réalisez une calibration.
+- placez le robot au sol, prôche de la ligne ou dans une position ou vous souhaitez expérimenter une recherche de ligne.
+- activez cette tâche : appuyez sur les 2 boutons en même temps et relachez le bouton gris en 1er (4 bip retentissent).
+- durant cette tâche la led jaune clignote, et le robot va faire des rotations successive à droite et à gauche de plus en plus large.
+- Fin du test :
+  - si le robot trouve la ligne : un son bip long se produit, la led jaune s'éteind, et la tâche de suivi de ligne est activée (vous pouvez l'annuler en appuyant sur n'importe quel bouton).
+  - si le robot termine sa recherche sans avoir trouvé la ligne :  le robot d'arrête, un son buzz long produit, et la led jaune reste fixe.
+
+NB: pour annuler cette tâche il suffit de lancer la tâche de suivi de ligne (Bouton bleu). Et éventuellement annuler ensuite ce suivi en appuyant sur n'importe quel bouton.

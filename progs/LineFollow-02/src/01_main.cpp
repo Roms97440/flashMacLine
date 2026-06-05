@@ -30,19 +30,23 @@ LED_BAT(ledBat, PIN_LED_ROUGE, capteurINA219, "Led Rouge -> batterie");
   //cette macro est un équivalent plus pratique de :
   // LedBat ledBat(PIN_LED_ROUGE, capteurINA219); //-> led rouge == alerte batterie
 
-
 //Configuration des moteurs 
-SmothMotor roueDroite(MV_RIGHT, true); 
-SmothMotor roueGauche(MV_LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
-  //-> Pour utiliser des moteurs basic, commenter les 2 lignes ci-dessus poour les remplacer par les 2 lignes ci-dessous
-//Motor roueDroite(MV_RIGHT, true); 
-//Motor roueGauche(MV_LEFT, false);
+ #if USE_MOTOR == _BASIC
+  Motor roueDroite(MV_RIGHT, true); 
+  Motor roueGauche(MV_LEFT, false);
+ #elif USE_MOTOR == _REACTIF  
+  SmothMotor roueDroite(MV_RIGHT, true, 0, 0, 30); 
+  SmothMotor roueGauche(MV_LEFT, false, 3, 3, 30); //la roue gauche semble 3% plus faible que la droite 
+ #else
+  SmothMotor roueDroite(MV_RIGHT, true); 
+  SmothMotor roueGauche(MV_LEFT,false, 3, 3); //la roue gauche semble 3% plus faible que la droite 
+ #endif
 BiMotor motors(roueDroite, roueGauche);
 
 //Le buzzer
 Buzzer buzzer(PIN_BUZZER);
 
-//Le contrôlleur de bouton : 2 bouttons => 3 actions ^^
+//Le contrôlleur de bouton : 2 bouttons => 4 actions ^^
     //définition des boutons physique
 ActionButton btGris(PIN_BT_GRIS);
 ActionButton btBleu(PIN_BT_BLEU);

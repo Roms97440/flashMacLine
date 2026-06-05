@@ -21,3 +21,5 @@ Notez que cette [documentation est consultable en ligne sur cette page](https://
     - puis, sécelectionnez le fichier `flashMacLine.code-workspace` (en racine du dossier du projet)
 
 Pour l'aide et la documentation de ce projet, consultez les fichiers de la rubrique `==== Doc ====`.<br/>Faites notamment une lecture attentive (obligatoire) du premier fichier de cette rubrique : [00_aide.md](doc/00_aide.md).
+
+Certains programmes disposent d'un fichier `src/__info.md` contenant une description et une aide de leur usage. Donc, avant d'utiliser un prigramme, véfifiez la présence de ce fichier.

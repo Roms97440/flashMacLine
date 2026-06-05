@@ -104,7 +104,7 @@ TaskFollow taskFollow;
 Task* ptrTaskFollow = &taskFollow; //pour la tâche Gardian
 
 SET_ACTION(setActionTaskFollow, biButton, BT2, [](bool launch, uint8_t bt){ //action sur l'activation du bouton bleu
-     if(launch) {
+     if(!taskFollow.isEnabled()) {
       taskFollow.start();
       return true;
      } else {
