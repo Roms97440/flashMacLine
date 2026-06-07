@@ -75,5 +75,12 @@
 				"foldStartRegex": "/\\*[\\s]*#region[\\s]*(.*)"
 			}
 		}
-	}
+	},
+	"extensions": {
+		"recommendations": [
+			"maptz.regionfolder",
+			"platformio.platformio-ide",
+			"gruntfuggly.todo-tree"
+		]
+ 	}	
 }
