@@ -35,14 +35,20 @@ int16_t erreur=0;
 class TaskFollow : public Task {
  protected :
    //... données internes de cette tâche ...
+   uint8_t _tmpCount;
  public :
    SETNAME("TaskFollow") //nom affiché dans le bilan de lancement de RMonitor
-   TaskFollow() : Task(capteur, false) {} //cette tâche va suivre la rythmique du capteur de ligne 
-      //---> elle sera tjs exécutée après la tâche de relevé de mesure, soit tutes les 20ms
+   TaskFollow() : Task(capteur, false, true), _tmpCount(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
+//Pour remplacer la synchro capteur par une périodicité de 20ms, commentez ci-dessus et décommenter ci-dessous
+//TaskFollow() : Task(20), _tmpCount(0)  {}
+
    void run() override {  
 /* #endregion */
 
 //============> Alog de pilotage  <================
+      if(_tmpCount>50){ //juste un log de vérification toutes les secondes (50*20ms)
+         LOG_INFO("[TaskFollow] : ok je suis actif.");
+      }
 
      // 1. Récupération de l'erreur (la déviation)
      lastErreur = erreur;
