@@ -61,7 +61,7 @@ class TaskGardian : public Task {
     Alerte _alerte;     //alerte actuelle
  public :
    SETNAME("TaskGardian") //nom affiché dans le bilan de lancement de RMonitor
-   TaskGardian() : Task(capteur, true, true),  _countLost(0), _countBlocked(0), _lastDeviation(2000), _boostIntensity(boostStep), _alerte(NONE) {} //cette tâche va suivre la rythmique du capteur de ligne 
+   TaskGardian() : Task(capteur, true),  _countLost(0), _countBlocked(0), _lastDeviation(2000), _boostIntensity(boostStep), _alerte(NONE) {} //cette tâche va suivre la rythmique du capteur de ligne 
       //---> elle sera tjs exécutée après la tâche de relevé de mesure, soit toutes les 20ms
    void run() override {  
       switch(_alerte){

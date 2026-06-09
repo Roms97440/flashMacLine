@@ -61,7 +61,7 @@ class TaskSniffer : public Task {
 
  public :
    SETNAME("TaskSniffer") //nom affiché dans le bilan de lancement de RMonitor
-   TaskSniffer() : Task(capteur, false, true), _move(NONE), _count(0), _endCount(0), _phase(0), _catch(0), _swap(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
+   TaskSniffer() : Task(capteur, false), _move(NONE), _count(0), _endCount(0), _phase(0), _catch(0), _swap(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
       //---> elle sera tjs exécutée après la tâche de relevé de mesure, soit toutes les 20ms
    void run() override {  
       if(ptrTaskFollow->isEnabled()){ //annulation de la tâche

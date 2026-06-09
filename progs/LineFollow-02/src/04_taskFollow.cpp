@@ -38,7 +38,7 @@ class TaskFollow : public Task {
    uint8_t _tmpCount;
  public :
    SETNAME("TaskFollow") //nom affiché dans le bilan de lancement de RMonitor
-   TaskFollow() : Task(capteur, false, true), _tmpCount(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
+   TaskFollow() : Task(capteur, false/*, true*/), _tmpCount(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
 //Pour remplacer la synchro capteur par une périodicité de 20ms, commentez ci-dessus et décommenter ci-dessous
 //TaskFollow() : Task(20), _tmpCount(0)  {}
 

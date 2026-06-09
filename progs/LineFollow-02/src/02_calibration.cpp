@@ -93,7 +93,7 @@ class AutoCalib : public Task { //Tâche de gestion de la calibration et des log
         } else {
           ledJaune.swap();
         }
-      } else { //on log l'atat du cpateur de ligne
+      } else { //on log l'état du capteur de ligne
         switch(capteur.state()){
           case SensorQTR_3RC::NEED_CALIBRATE:
             LOG_INFO("LogQtr : capteur non calibré");
