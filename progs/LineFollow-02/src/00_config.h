@@ -33,12 +33,12 @@
 
 /* - Choix du type de moteur à utiliser  (choisir entre _BASIC , _SMOTH et _REACTIF) */
 //NB: si les 2 sont commentés, ce sera des moteurs SMOTH qui seront utilisé
-//#define USE_MOTOR _BASIC
+#define USE_MOTOR _BASIC
 //#define USE_MOTOR _SMOTH 
-#define USE_MOTOR _REACTIF
+//#define USE_MOTOR _REACTIF
 
 /* - Décommenter ci-dessous pour activer la tâche Gardian (voir `06_gardian.cpp`) */
-#define ENABLE_GARDIAN  
+//#define ENABLE_GARDIAN  
 
 /* - Décommenter ci-dessous pour activer la tâche Sniffer (voir `07_sniffer.cpp`) */
-#define ENABLE_SNIFFER
+//#define ENABLE_SNIFFER

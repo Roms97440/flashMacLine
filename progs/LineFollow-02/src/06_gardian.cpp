@@ -46,8 +46,9 @@ extern Led ledJaune;  //pour la led jaune (définit dans 02_calibragtion.cpp)
 
 // ==== constantes de réglage =============
 constexpr bool boostIfBlocked = true; //mettre à false si le robot doit simplement tout arrêter quand il est bloqué
-constexpr uint8_t boostMax = 120; //si le boost atteint cette limite lors des tentatives de déblockage "robot immobile", le robot abandonne
+constexpr uint8_t boostMax = 250; //si le boost atteint cette limite lors des tentatives de déblockage "robot immobile", le robot abandonne
 constexpr uint8_t boostStep = 20; //valeur d'augmentation du boost à chaque tentative successive de déblocage
+constexpr uint8_t lostCount = 200;
 // ====  ====  ====  ====  ====  ====  ==== 
 
 class TaskGardian : public Task {
@@ -69,7 +70,7 @@ class TaskGardian : public Task {
           //analyse de l'alerte LOST
           if(ptrTaskFollow->isEnabled() && capteur.lostLine()) {
             _countLost++;
-            if(_countLost>=50){ //alerte de perte de ligne
+            if(_countLost>=lostCount){ //alerte de perte de ligne
               _alerte=LOST;
               ptrTaskFollow->setEnabled(false); //on arrête la tâche de suivi de ligne
               motors.stop(); //on coupe les moteurs

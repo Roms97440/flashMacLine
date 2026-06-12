@@ -1,5 +1,6 @@
 //Fichier source secondaire: 
 #include "00_config.h"
+
 //  ===> Tâche principale pour le suivi de ligne !!!! 
 
 /* #region(close) les #include */
@@ -17,18 +18,22 @@ extern BiMotor motors;
 /* #endregion */
 
 // ====  Constante de réglage (à ajuster empiriquement)  ====
-constexpr uint8_t maxSpeed = 90; //vittesse maximum des roues (peut-être il faut l'augmenter un peu...)
-constexpr int vBase = 150; //150
-constexpr float Kp = 0.2;//.20 correction instantannée
-constexpr float Kd=0.3;//derivé.15 smoothing correction
-constexpr float gain = 0.65;//.65 force de correction par rapport à la vitesse de base
+constexpr uint8_t maxSpeed = 100; //vittesse maximum des roues (peut-être il faut l'augmenter un peu...)
+constexpr int vBase = 55; //150
+constexpr float Kp = 9;//.20 correction instantannée
+constexpr float ki = 0.0015;
+constexpr float Kd= 0.3;//derivé.15 smoothing correction
+constexpr float gain = 11;//.65 force de correction par rapport à la vitesse de base
 // ====  ====  ====  ====  ====  ====  ====  ====  ====  ====
 
 // ***  Variables exploitées par l'algo de pilotage   ***
-long dt =1;
-long dtpred=1;
+long dt =0;
 float lastErreur=0;
-int16_t erreur=0;
+float erreur=0;
+long lastTime=micros();
+long now = 0;
+float integral=0;
+
 // ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***
 
 /* #region(close) Code fixe avant l'algo de pilotage */
@@ -40,7 +45,7 @@ class TaskFollow : public Task {
    SETNAME("TaskFollow") //nom affiché dans le bilan de lancement de RMonitor
    TaskFollow() : Task(capteur, false/*, true*/), _tmpCount(0) {} //cette tâche va suivre la rythmique du capteur de ligne 
 //Pour remplacer la synchro capteur par une périodicité de 20ms, commentez ci-dessus et décommenter ci-dessous
-//TaskFollow() : Task(20), _tmpCount(0)  {}
+//TaskFollow() : Task(20,false), _tmpCount(0)  {}
 
    void run() override {  
 /* #endregion */
@@ -50,16 +55,18 @@ class TaskFollow : public Task {
          LOG_INFO("[TaskFollow] : ok je suis actif.");
       }
 
+      now=micros();
      // 1. Récupération de l'erreur (la déviation)
-     lastErreur = erreur;
-     erreur = capteur.deviation();
      
-     dtpred=dt;
-     dt=micros();
+     erreur = capteur.deviation()/1000;
+      integral+=erreur*(float)dt/1000000;
+     dt = now-lastTime;
 
      // 2. Calcul de la correction Proportionnelle
-    float D = Kd * ((erreur - lastErreur) / (dt-dtpred));
-    int correction = erreur * Kp + D; 
+     float I= ki*integral;
+    float D = Kd * ((erreur - lastErreur) / (float)(dt))*1000000;
+    lastErreur = erreur;
+    int correction = erreur * Kp + D + I; 
      
      // 3. Calcul des vitesses théoriques (non bridées, peuvent être négatives)
      int vGauche = vBase - correction*gain;
@@ -79,8 +86,8 @@ class TaskFollow : public Task {
      }
      
      // 5. Extraction de la puissance absolue et bridage matériel (0-maxSpeed)
-     uint8_t pwmGauche = min(vGauche, maxSpeed);
-     uint8_t pwmDroite = min(vDroite, maxSpeed);
+     uint8_t pwmGauche = min(vGauche==0 ? 0 : (vGauche+30), maxSpeed);
+     uint8_t pwmDroite = min(vDroite == 0 ? 0: (vDroite+30), maxSpeed);
      
      // 6. Envoi des consignes
      //ajouter true en 3e param de move pour désactiver le smoothing

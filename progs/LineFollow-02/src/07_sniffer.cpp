@@ -41,10 +41,10 @@ extern Led ledJaune;  //pour la led jaune (définit dans 02_calibragtion.cpp)
 /* #endregion */
 
 // == constantes de réglage =============
-constexpr uint8_t speedTS = 80; //vitesse des rotations 
+constexpr uint8_t speedTS = 110; //vitesse des rotations 
 constexpr uint8_t catchWin = 4; //nombre de capture positive de la ligne concécutive avant de conclure qu'on l'a retrouvé
 constexpr uint8_t maxPhase = 8; //nbr de phase maximum (1 phase = rotation dans un sens)
-constexpr int16_t stepPhase = 100; //durée du pas des phases de rotation en nombre de cycle de 20 ms.  100 => 2s
+constexpr int16_t stepPhase = 30; //durée du pas des phases de rotation en nombre de cycle de 20 ms.  100 => 2s
 constexpr bool followIfFound = true; //mettre à false si le robot doit simplement tout arrêter quand il a retrouvé la ligne
 // ====  ====  ====  ====  ====  ====  ==== 
 
@@ -77,7 +77,7 @@ class TaskSniffer : public Task {
         _endCount=stepPhase; //sur le 1er mouvement 1 seul stepPhase à atteindre
         _catch=0;
         //on commence la recherche dans le sens ou la ligne à était vue la dernière fois
-        _move = capteur.deviation()>0 ? LEFT : RIGHT; //TODO à tester pour voir s'il faut inverser ! 
+        _move = capteur.deviation()>0 ? RIGHT : LEFT; //TODO à tester pour voir s'il faut inverser ! 
         _swap=0;
       } else {
         if(capteur.lostLine()){ //On a pas retrouvé la ligne ? 
